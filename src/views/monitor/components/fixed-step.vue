@@ -7,7 +7,7 @@
           <span class="blue">病情将持续恶化</span>
         </div>
       </div>
-      <slider-unlock @success="success" :item="item"></slider-unlock>
+      <slider-unlock @success="onSuccess" :item="item"></slider-unlock>
     </div>
   </div>
 </template>
@@ -17,7 +17,7 @@ import { imageUrl } from "@/utils/ruoyi";
 import sliderUnlock from "./slider-unlock.vue";
 
 //滑动进入下一步
-const success = (e) => {
+const onSuccess = (e) => {
   console.log("e..", e);
 };
 </script>

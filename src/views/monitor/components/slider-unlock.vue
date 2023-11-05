@@ -27,7 +27,7 @@
 <script setup>
 import { onMounted, ref, defineEmits, defineProps } from "vue";
 
-const emit = defineEmits("success");
+const emit = defineEmits(["success"]);
 const props = defineProps(["item"]);
 
 const isSuccess = ref(false);
