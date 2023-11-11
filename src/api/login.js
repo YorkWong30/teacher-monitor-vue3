@@ -10,7 +10,7 @@ export function login(username, password) {
   return request({
     url: "/jhcloud-portal/auth/login",
     headers: {
-      // isToken: false,
+      isToken: false,
       "content-type": "application/x-www-form-urlencoded",
       Authorization: "Basic V2VDaGF0OjEyMzQ1Ng==",
     },

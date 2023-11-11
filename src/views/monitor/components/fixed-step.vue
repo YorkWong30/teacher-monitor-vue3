@@ -1,27 +1,42 @@
 <template>
-  <div class="step-box x-ac">
-    <div class="slider-con" v-for="item in 2" :key="item">
+  <div class="step-box x-ac" v-if="renderList && renderList.length">
+    <div class="slider-con" v-for="item in renderList" :key="item.workflowId">
       <div class="des x-c">
         <div class="more-t">
           <span>下个环节：</span>
-          <span class="blue">病情将持续恶化</span>
+          <span class="blue">{{ item?.content }}</span>
         </div>
       </div>
       <slider-unlock @success="onSuccess" :item="item"></slider-unlock>
     </div>
   </div>
+  <div class="step-box x-c" v-else>训练结束✅</div>
 </template>
 <script setup>
-import { getCurrentInstance, ref, watch } from "vue";
+import { getCurrentInstance, ref, watch, defineProps } from "vue";
+import { showSuccessToast } from "vant";
 import { imageUrl } from "@/utils/ruoyi";
 import sliderUnlock from "./slider-unlock.vue";
 
 //滑动进入下一步
+const props = defineProps({
+  renderList: {
+    type: Array,
+    default: [],
+  },
+});
+
+const emit = defineEmits(["emitSuccess"]);
 const onSuccess = (e) => {
-  console.log("e..", e);
+ 
+  setTimeout(() => {
+    console.log("e..", e);
+    emit("emitSuccess", e);
+  }, 500);
 };
 </script>
 <style lang="scss">
+
 .step-box {
   padding: 20px;
   background-color: #e4e9f3;

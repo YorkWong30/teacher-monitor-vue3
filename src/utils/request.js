@@ -4,8 +4,10 @@ import { getToken } from "@/utils/auth";
 import errorCode from "@/utils/errorCode";
 import { tansParams, blobValidate } from "@/utils/ruoyi";
 import cache from "@/plugins/cache";
+import { showToast } from "vant";
+import { showConfirmDialog } from "vant";
 // import { saveAs } from "file-saver";
-// import useUserStore from "@/store/modules/user";
+import useUserStore from "@/store/modules/user";
 
 let downloadLoadingInstance;
 // 是否显示重新登录
@@ -26,7 +28,6 @@ service.interceptors.request.use(
     const isToken = (config.headers || {}).isToken === false;
     // 是否需要防止数据重复提交
     const isRepeatSubmit = (config.headers || {}).repeatSubmit === false;
-
 
     if (getToken() && !isToken) {
       config.headers["Authorization"] = "Bearer " + getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
@@ -107,9 +108,28 @@ service.interceptors.response.use(
     ) {
       return res.data;
     }
-    if (code === 401) {
-      if (!isRelogin.show) {
+    if (code === 101) {
+      console.log("isRelogin..", isRelogin);
+      if (1) {
         isRelogin.show = true;
+
+        showConfirmDialog({
+          title: "账号提示",
+          message: "登录状态已过期，您可以继续留在该页面，或者重新登录",
+        })
+          .then(() => {
+            // on confirm
+            isRelogin.show = false;
+            useUserStore()
+              .logOut()
+              .then(() => {
+                location.href = "/login";
+              });
+          })
+          .catch(() => {
+            // on cancel
+            isRelogin.show = false;
+          });
         // ElMessageBox.confirm(
         //   "登录状态已过期，您可以继续留在该页面，或者重新登录",
         //   "系统提示",
@@ -131,7 +151,8 @@ service.interceptors.response.use(
         //     isRelogin.show = false;
         //   });
       }
-      return Promise.reject("无效的会话，或者会话已过期，请重新登录。");
+      return false;
+      // return Promise.reject("无效的会话，或者会话已过期，请重新登录。");
     } else if (code === 500) {
       // ElMessage({ message: msg, type: "error" });
       return Promise.reject(new Error(msg));

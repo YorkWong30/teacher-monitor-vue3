@@ -122,11 +122,11 @@ function success() {
   //移除移动端事件
   document.ontouchstart = null;
   document.ontouchmove = null;
-  emit("success", props);
+  emit("success", props?.item);
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 * {
   touch-action: pan-y;
 }

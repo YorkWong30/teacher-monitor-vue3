@@ -19,13 +19,28 @@
                 inactive-color="#000000"
                 size="15px"
               />
-              <span style="margin-left: 5px">设置</span>
+              <van-button
+                @click="doMonitorSettingShow"
+                size="mini"
+                plain
+                type="default"
+                :disabled="!monitorIsOpen"
+                style="
+                  height: 16px;
+                  color: #000;
+                  width: 30px;
+                  font-size: 10px;
+                  padding: 0;
+                  margin-left: 5px;
+                "
+                >设置</van-button
+              >
             </div>
           </div>
         </div>
       </van-col>
-      <van-col span="4">
-        <div class="common-col common-control flow y-bc" @click="preview()">
+      <van-col span="4" @click="doFlowShow">
+        <div class="common-col common-control flow y-bc">
           <div class="white f14">案例流程</div>
           <img :src="imageUrl('flow.png')" mode="scaleToFill" /></div
       ></van-col>
@@ -35,53 +50,121 @@
           <img :src="imageUrl('assist.png')" mode="scaleToFill" /></div
       ></van-col>
       <van-col span="4">
-        <div class="common-col common-control flow y-bc">
+        <div class="common-col common-control flow y-bc" @click="reset">
           <div class="white f14">模拟重置</div>
           <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
       ></van-col>
     </van-row>
-    <div class="second-box">
+    <div class="second-box" v-if="examPointList && examPointList.length">
       <div class="title-box van-hairline--bottom x-f">
-        <div class="one-t">请引导学员完成以下步骤</div>
+        <div class="one-t">{{ examPointList[0]?.point }}</div>
       </div>
       <div class="list-box">
-        <div class="list-item" v-for="item in 5" :key="item">
-          1.病史采集病史采集病史采集病史采集病史采集病史采集病史采集病史采集病史采集病史采集
+        <div
+          class="list-item"
+          v-for="(item, index) in examPointList[0]?.childList"
+          :key="item?.pointId"
+        >
+          {{ index + 1 }}.{{ item?.point }}
         </div>
       </div>
     </div>
 
+    <!--案例流程弹框 -->
+    <flow-popup
+      v-model:show="showFlowPopup"
+      :workflowChart="workflowChart"
+    ></flow-popup>
+
     <!-- 辅助检查弹框 -->
-    <van-popup
-      style="width: 100vw; height: 80vh; border-radius: 6px"
+    <check-popup
+      :checkReport="checkReport"
       v-model:show="showCheckPopup"
-      :style="{ padding: '64px' }"
-    >
-      <div>内容内容内容</div>
-    </van-popup>
+      @onPushed="onPushed"
+    ></check-popup>
+
+    <!-- 心电监护仪参数控制板 -->
+    <monitor-setting-popup
+      v-model:show="showMonitorSettingPopup"
+      :curCheckList="curWorkFlowObj.checkList"
+      @updateMonitor="updateMonitor"
+    ></monitor-setting-popup>
   </div>
 </template>
 <script setup>
-import { getCurrentInstance, ref, watch } from "vue";
-import { ImagePreview, showImagePreview } from "vant";
+import { getCurrentInstance, ref, defineProps, watch } from "vue";
+import flowPopup from "./control-area-componets/flow-popup.vue";
+import checkPopup from "./control-area-componets/check-popup.vue";
+import monitorSettingPopup from "./control-area-componets/monitor-setting-popup.vue";
 import { imageUrl } from "@/utils/ruoyi";
-const monitorIsOpen = ref(false); //monitor是否开启
-console.log("imageUrl..", imageUrl);
-const showCheckPopup = ref(false);
+import { showConfirmDialog } from "vant";
+import { teacherPushMonitor } from "@/api/index";
+const props = defineProps({
+  curWorkFlowObj: {
+    type: Object,
+    required: true,
+  },
+  workflowChart: {
+    type: Object,
+    required: true,
+  },
+  examPointList: {
+    type: Object,
+    required: true,
+  },
+  checkReport: {
+    type: Object,
+    required: true,
+  },
+});
+
+const monitorIsOpen = ref(true); //monitor是否开启
+const showCheckPopup = ref(false); //辅助检查弹窗是否开启
+const showFlowPopup = ref(false); //步骤图 popup 是否打开
+const showMonitorSettingPopup = ref(false); //心电监护仪参数控制板是否开启
+
+const emits = defineEmits(["onPush", "onReset", "updateMonitor"]);
 //查看流程
-const preview = () => {
-  showImagePreview([
-    "https://fastly.jsdelivr.net/npm/@vant/assets/apple-1.jpeg",
-    "https://fastly.jsdelivr.net/npm/@vant/assets/apple-2.jpeg",
-  ]);
+const doFlowShow = () => {
+  showFlowPopup.value = true;
+};
+const closeFlowPopup = () => {
+  showFlowPopup.value = false;
 };
 
 //查看辅助检查报告
 const doCheckShow = () => {
   showCheckPopup.value = true;
 };
+
+const doMonitorSettingShow = () => {
+  showMonitorSettingPopup.value = true;
+};
+
+const onPushed = (item) => {
+  emits("onPush", item);
+};
+
+const reset = () => {
+  showConfirmDialog({
+    title: "提示",
+    message: "是否重置当前训练？",
+  })
+    .then(() => {
+      // on confirm
+      emits("onReset");
+    })
+    .catch(() => {
+      // on cancel
+    });
+};
+
+const updateMonitor = (e) => {
+  console.log("updateMonitor..", e);
+  emits("updateMonitor", e);
+};
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 :root {
   --van-switch-width: 30px;
 }
@@ -158,7 +241,7 @@ const doCheckShow = () => {
     .list-item {
       color: #000;
       font-size: 16px;
-      line-height: 26px;
+      line-height: 30px;
       text-align: left;
     }
   }

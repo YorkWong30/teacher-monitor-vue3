@@ -6,7 +6,7 @@
         v-for="(item, index) in propList?.pointList"
         :key="item?.pointId"
       >
-        <span class="blue">要点{{ index + 1 }}:</span>
+        <span class="blue" style="margin-right: 7px;">要点{{ index + 1 }}:</span>
         <span>{{ item?.point }}</span>
       </div>
     </div>

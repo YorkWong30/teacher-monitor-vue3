@@ -59,18 +59,25 @@ const useUserStore = defineStore("user", {
     // 退出系统
     logOut() {
       return new Promise((resolve, reject) => {
-        logout(this.token)
-          .then(() => {
-            this.token = "";
-            this.roles = [];
-            this.permissions = [];
-            removeToken();
-            resolve();
-          })
-          .catch((error) => {
-            reject(error);
-          });
+        this.token = "";
+        this.roles = [];
+        this.permissions = [];
+        removeToken();
+        resolve();
       });
+      // return new Promise((resolve, reject) => {
+      //   logout(this.token)
+      //     .then(() => {
+      //       this.token = "";
+      //       this.roles = [];
+      //       this.permissions = [];
+      //       removeToken();
+      //       resolve();
+      //     })
+      //     .catch((error) => {
+      //       reject(error);
+      //     });
+      // });
     },
   },
 });
