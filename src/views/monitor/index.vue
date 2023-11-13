@@ -129,14 +129,18 @@ const PushedReports = ref([]); //已推送的报告
 
 // 修改已推送的报告的状态
 const changeReportStatus = (arr) => {
-  arr.forEach((r) => {
-    if (PushedReports.value.includes(r.reportId)) {
-      r.isSend = true;
-    } else {
-      r.isSend = false;
-    }
-  });
-  return arr;
+  if (arr && arr.length) {
+    arr.forEach((r) => {
+      if (PushedReports.value.includes(r.reportId)) {
+        r.isSend = true;
+      } else {
+        r.isSend = false;
+      }
+    });
+    return arr;
+  } else {
+    return [];
+  }
 };
 const data = reactive({
   physicalExam: undefined,

@@ -123,11 +123,11 @@ const props = defineProps({
 });
 
 watch(
-  () => props.show,
+  () => props.curCheckList,
   (newVal, oldVal) => {
     updateButtonDisabled.value = true;
-
     console.log(newVal, oldVal);
+
     if (props.curCheckList && props.curCheckList.length) {
       for (let key in sliderObj.value) {
         console.log(key + ": " + sliderObj.value[key]);

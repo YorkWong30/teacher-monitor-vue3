@@ -48,7 +48,6 @@ const close = () => {
 };
 </script>
 <style lang="scss" scoped>
-
 .flow-box {
   width: 100%;
   height: 90%;

@@ -57,7 +57,7 @@
     </van-row>
     <div class="second-box" v-if="examPointList && examPointList.length">
       <div class="title-box van-hairline--bottom x-f">
-        <div class="one-t">{{ examPointList[0]?.point }}</div>
+        <div class="more-t">{{ examPointList[0]?.point }}</div>
       </div>
       <div class="list-box">
         <div
