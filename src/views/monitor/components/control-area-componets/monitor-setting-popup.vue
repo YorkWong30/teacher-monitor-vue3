@@ -3,6 +3,7 @@
     style="width: 100vw; height: 55vh"
     :show="show"
     :style="{ padding: '0px' }"
+    :close-on-click-overlay="false"
     closeable
     @close="close"
   >

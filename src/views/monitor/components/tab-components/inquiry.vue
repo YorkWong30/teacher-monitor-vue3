@@ -6,12 +6,15 @@
         v-for="(item, index) in propList?.pointList"
         :key="item?.pointId"
       >
-        <span class="blue" style="margin-right: 7px;">要点{{ index + 1 }}:</span>
+        <span class="blue" style="margin-right: 7px">要点{{ index + 1 }}:</span>
         <span>{{ item?.point }}</span>
       </div>
     </div>
 
-    <div class="report">
+    <div
+      class="report"
+      v-if="propList?.reportList && propList?.reportList.length"
+    >
       <van-image
         v-for="(item, index) in propList?.reportList"
         :key="item?.reportId"
@@ -27,6 +30,7 @@
 </template>
 <script setup>
 const props = defineProps(["propList"]);
+console.log("props....", props);
 </script>
 <style lang="scss" scoped>
 .the-box {

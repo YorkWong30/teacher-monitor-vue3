@@ -3,6 +3,7 @@
     <van-popup
       style="width: 100vw; height: 40vh"
       :show="show"
+      :close-on-click-overlay="false"
       :style="{ padding: '0px' }"
       closeable
       @close="close"

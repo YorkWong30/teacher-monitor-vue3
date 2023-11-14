@@ -4,7 +4,7 @@
       <van-col span="4">
         <div class="common-col head">
           <img :src="imageUrl('head.png')" mode="scaleToFill" />
-          <div class="id white">ID.12490</div>
+          <div class="id white">ID.230324</div>
         </div>
       </van-col>
       <van-col span="8">

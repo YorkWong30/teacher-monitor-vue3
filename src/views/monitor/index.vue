@@ -11,7 +11,7 @@
       <!-- 顶部控制区 -->
       <control-area
         :curWorkFlowObj="curWorkFlowObj"
-        :examPointList="curWorkFlowObj?.examPointList"
+        :examPointList="examPointList"
         :workflowChart="data.workflowChart"
         :checkReport="data.checkReport"
         @onPush="onPush"
@@ -37,37 +37,33 @@
           title-active-color="#000000"
           shrink
         >
-          <van-tab v-for="tab in tabList" :key="tab.index">
-            <template v-slot:title>
-              <div class="x-f">
-                <img
-                  v-if="active == tab.index"
-                  style="width: 32px; height: 32px"
-                  :src="imageUrl(tab.icon)"
-                  mode="scaleToFill"
-                />
-                <span>{{ tab.title }}</span>
+          <block v-for="tab in curWorkFlowObj?.moduleList" :key="tab.moduleId">
+            <van-tab v-if="tab?.moduleId !== 1" :name="tab.moduleId">
+              <template v-slot:title>
+                <div class="x-f">
+                  <img
+                    v-if="active == tab.moduleId"
+                    style="width: 32px; height: 32px"
+                    :src="imageUrl(tab.icon)"
+                    mode="scaleToFill"
+                  />
+                  <span>{{ tab.moduleName }}</span>
+                </div>
+              </template>
+              <div style="" class="common-tab">
+                <!-- 问诊对话 -->
+                <inquiry v-show="tab.moduleId === 2" :propList="tab"></inquiry>
+                <!-- 体检结果 -->
+                <inquiry v-show="tab.moduleId === 3" :propList="tab"></inquiry>
+                <!-- 辅助检查 -->
+                <tab-check
+                  :propList="tab"
+                  v-show="tab.moduleId === 4"
+                  @onPush="onPush"
+                ></tab-check>
               </div>
-            </template>
-            <div style="" class="common-tab">
-              <!-- 问诊对话 -->
-              <inquiry v-show="active == 0" :propList="data.inquiry"></inquiry>
-              <!-- 体检结果 -->
-              <inquiry
-                v-show="active == 1"
-                :propList="data.physicalExam"
-              ></inquiry>
-              <!-- 辅助检查 -->
-              <tab-check
-                :auxiliaryExamPointList="curWorkFlowObj?.auxiliaryExamPointList"
-                :auxiliaryExamReportList="
-                  curWorkFlowObj?.auxiliaryExamReportList
-                "
-                v-show="active == 2"
-                @onPush="onPush"
-              ></tab-check>
-            </div>
-          </van-tab>
+            </van-tab>
+          </block>
         </van-tabs>
       </div>
       <fixed-step
@@ -88,7 +84,7 @@ import tabCheck from "@/views/monitor/components/tab-components/tab-check";
 const route = useRoute();
 const router = useRouter();
 import { imageUrl } from "@/utils/ruoyi";
-
+const examPointList = ref([]); //顶部考点
 import {
   init,
   teacherPushWorkflow,
@@ -113,7 +109,7 @@ const themeVars = reactive({
   navBarTitleTextColor: "#fff",
 });
 const query = ref(undefined);
-const active = ref(0);
+const active = ref(2);
 const firstWorkflowId = ref(1); //初始的workflowId
 //监听路由参数
 watch(
@@ -187,19 +183,9 @@ const initPushedReports = () => {
     data.checkReport.reportList = changeReportStatus(
       data.checkReport.reportList
     );
-    curWorkFlowObj.value.auxiliaryExamReportList = changeReportStatus(
-      curWorkFlowObj.value.auxiliaryExamReportList
-    );
   }
 
-  if (
-    curWorkFlowObj.value.auxiliaryExamReportList &&
-    curWorkFlowObj.value.auxiliaryExamReportList.length
-  ) {
-    curWorkFlowObj.value.auxiliaryExamReportList = changeReportStatus(
-      curWorkFlowObj.value.auxiliaryExamReportList
-    );
-  }
+  dealWidthCurWorkFlowObj();
 };
 //初始化
 const initPage = () => {
@@ -221,9 +207,8 @@ const initPage = () => {
         console.log(" data.checkReport...", data.checkReport);
 
         curWorkFlowObj.value = res.data?.workflowList[0];
-        curWorkFlowObj.value.auxiliaryExamReportList = changeReportStatus(
-          res.data?.workflowList[0]?.auxiliaryExamReportList
-        );
+        // 处理curWorkFlowObj
+        dealWidthCurWorkFlowObj();
 
         firstWorkflowId.value = curWorkFlowObj.value.workflowId;
         console.log("curWorkFlowObj...", curWorkFlowObj.value);
@@ -242,6 +227,7 @@ const filterDataByWorkflowId = (workflowIdParams, arr) => {
     arr.forEach((arrItem) => {
       if (arrItem.workflowId == workflowIdParams) {
         curWorkFlowObj.value = JSON.parse(JSON.stringify(arrItem));
+        dealWidthCurWorkFlowObj();
         return false;
       } else {
         filterDataByWorkflowId(workflowIdParams, arrItem.childList);
@@ -250,9 +236,26 @@ const filterDataByWorkflowId = (workflowIdParams, arr) => {
   }
 };
 
+//after update CurWorkFlowObj,we need some action;
+const dealWidthCurWorkFlowObj = () => {
+  if (curWorkFlowObj.value && curWorkFlowObj.value?.moduleList?.length) {
+    curWorkFlowObj.value?.moduleList.forEach((item, index, arr) => {
+      //赋值顶部考点
+      if (arr[index].moduleId === 1) {
+        examPointList.value = arr[index].pointList;
+      }
+
+      //辅助检查的报告推送状态修改
+      if (arr[index].moduleId === 4) {
+        arr[index].reportList = changeReportStatus(arr[index].reportList);
+      }
+    });
+  }
+};
+
 // 推进下一环节
 const emitSuccess = (item) => {
-  console.log("next。。item。。", item);
+  console.log("推进下一环节", item);
   if (item.childList.length) {
     // 跳过type == 2的检查项
     if (item.childList[0].type == 2) {
@@ -268,7 +271,7 @@ const emitSuccess = (item) => {
     }
     filterDataByWorkflowId(theWorkFlowId, data.workflowList);
   }
-
+  dealWidthCurWorkFlowObj();
   console.log("curWorkFlowObj.value.....", curWorkFlowObj.value);
 
   let params = {

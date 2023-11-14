@@ -1,18 +1,23 @@
 <template>
   <div class="check-box">
-    <div class="point">
+    <div class="point" v-if="propList?.pointList && propList?.pointList.length">
       <div
         class="point-item"
-        v-for="(item, index) in auxiliaryExamPointList"
+        v-for="(item, index) in propList?.pointList"
         :key="item?.pointId"
       >
         <span class="blue" style="margin-right: 7px">要点{{ index + 1 }}:</span>
         <span>{{ item?.point }}</span>
       </div>
     </div>
-    <van-grid :border="false" clickable column-num="5">
+    <van-grid
+      :border="false"
+      clickable
+      column-num="5"
+      v-if="propList?.reportList && propList.reportList.length"
+    >
       <van-grid-item
-        v-for="(item, index) in auxiliaryExamReportList"
+        v-for="(item, index) in propList?.reportList"
         :key="item?.reportId"
       >
         <van-image :src="item?.url" @click="onImage(item, index)">
@@ -50,23 +55,15 @@
 import { defineProps, defineEmits, watch, ref } from "vue";
 import { ImagePreview, showImagePreview } from "vant";
 
-const props = defineProps({
-  auxiliaryExamPointList: {
-    type: Array,
-  },
-  auxiliaryExamReportList: {
-    type: Array,
-  },
-});
+const props = defineProps(["propList"]);
 
 const emits = defineEmits(["onPush"]);
 
 const checkReportImageList = ref([]);
 //报告的图片数据转数组
 watch(
-  () => props.auxiliaryExamReportList,
+  () => props.propList.reportList,
   (newVal) => {
-    console.log("newVal...auxiliaryExamReportList", newVal);
     checkReportImageList.value.splice(0);
     if (newVal && newVal && newVal.length) {
       newVal.forEach((element) => {
@@ -74,7 +71,6 @@ watch(
       });
     }
     console.log(
-      "auxiliaryExamReportList;checkReportImageList..",
       checkReportImageList
     );
   },
