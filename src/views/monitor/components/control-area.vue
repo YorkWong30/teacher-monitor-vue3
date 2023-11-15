@@ -55,17 +55,18 @@
           <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
       ></van-col>
     </van-row>
-    <div class="second-box" v-if="examPointList && examPointList.length">
-      <div class="title-box van-hairline--bottom x-f">
+    <div class="second-box">
+      <!-- <div class="title-box van-hairline--bottom x-f">
         <div class="more-t">{{ examPointList[0]?.point }}</div>
-      </div>
+      </div> -->
       <div class="list-box">
         <div
+          v-if="examPointList && examPointList.length"
           class="list-item"
-          v-for="(item, index) in examPointList[0]?.childList"
-          :key="item?.pointId"
-        >
-          {{ index + 1 }}.{{ item?.point }}
+          v-html="examPointList[0]?.point"
+        ></div>
+        <div v-else class="list-item">
+          当前环节无考点，老师可根据实际情况进行考察。
         </div>
       </div>
     </div>
@@ -117,7 +118,9 @@ const props = defineProps({
     required: true,
   },
 });
-
+const textF = ref(
+  "<ul>\r\n\t<li>病史采集</li>\r\n\t<li>体格检查</li>\r\n\t</ul>"
+);
 const monitorIsOpen = ref(true); //monitor是否开启
 const showCheckPopup = ref(false); //辅助检查弹窗是否开启
 const showFlowPopup = ref(false); //步骤图 popup 是否打开
@@ -233,7 +236,7 @@ const updateMonitor = (e) => {
     font-weight: bold;
   }
   .list-box {
-    height: calc(100% - 56px);
+    height: 100%;
     overflow-y: auto;
     padding: 10px 20px;
     box-sizing: border-box;

@@ -2,13 +2,10 @@
   <div class="the-box">
     <div class="point">
       <div
+        v-if="propList?.pointList && propList?.pointList.length"
         class="point-item"
-        v-for="(item, index) in propList?.pointList"
-        :key="item?.pointId"
-      >
-        <span class="blue" style="margin-right: 7px">要点{{ index + 1 }}:</span>
-        <span>{{ item?.point }}</span>
-      </div>
+        v-html="propList?.pointList[0]?.point"
+      ></div>
     </div>
 
     <div

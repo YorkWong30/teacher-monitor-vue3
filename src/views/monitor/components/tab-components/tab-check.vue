@@ -1,6 +1,13 @@
 <template>
   <div class="check-box">
-    <div class="point" v-if="propList?.pointList && propList?.pointList.length">
+    <div class="point">
+      <div
+        class="point-item"
+        v-if="propList?.pointList && propList?.pointList.length"
+        v-html="propList?.pointList[0]?.point"
+      ></div>
+    </div>
+    <!-- <div class="point" v-if="propList?.pointList && propList?.pointList.length">
       <div
         class="point-item"
         v-for="(item, index) in propList?.pointList"
@@ -9,7 +16,7 @@
         <span class="blue" style="margin-right: 7px">要点{{ index + 1 }}:</span>
         <span>{{ item?.point }}</span>
       </div>
-    </div>
+    </div> -->
     <van-grid
       :border="false"
       clickable
@@ -70,9 +77,7 @@ watch(
         checkReportImageList.value.push(element.url);
       });
     }
-    console.log(
-      checkReportImageList
-    );
+    console.log(checkReportImageList);
   },
   {
     immediate: true,

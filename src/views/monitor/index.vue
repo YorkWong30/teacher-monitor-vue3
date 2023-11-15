@@ -51,19 +51,31 @@
                 </div>
               </template>
               <div style="" class="common-tab">
-                <!-- 问诊对话 -->
-                <inquiry v-show="tab.moduleId === 2" :propList="tab"></inquiry>
-                <!-- 体检结果 -->
-                <inquiry v-show="tab.moduleId === 3" :propList="tab"></inquiry>
+                <!-- 大图 -->
+                <inquiry v-show="tab.style === 1" :propList="tab"></inquiry>
+
                 <!-- 辅助检查 -->
                 <tab-check
                   :propList="tab"
-                  v-show="tab.moduleId === 4"
+                  v-show="tab.style === 2"
                   @onPush="onPush"
                 ></tab-check>
               </div>
             </van-tab>
           </block>
+          <div
+            v-if="
+              !curWorkFlowObj?.moduleList ||
+              (curWorkFlowObj?.moduleList.length == 1 &&
+                curWorkFlowObj?.moduleList?.find(
+                  (item) => item.moduleId == 1
+                ) != undefined)
+            "
+            class="common-tab x-c"
+            style="background-color: #fff"
+          >
+            当前环节无工具项
+          </div>
         </van-tabs>
       </div>
       <fixed-step
@@ -238,11 +250,13 @@ const filterDataByWorkflowId = (workflowIdParams, arr) => {
 
 //after update CurWorkFlowObj,we need some action;
 const dealWidthCurWorkFlowObj = () => {
+  console.log("examPointList.value", examPointList.value);
+  examPointList.value.splice(0);
   if (curWorkFlowObj.value && curWorkFlowObj.value?.moduleList?.length) {
     curWorkFlowObj.value?.moduleList.forEach((item, index, arr) => {
       //赋值顶部考点
       if (arr[index].moduleId === 1) {
-        examPointList.value = arr[index].pointList;
+        examPointList.value = arr[index].pointList || [];
       }
 
       //辅助检查的报告推送状态修改
@@ -387,6 +401,20 @@ onMounted(() => {
 });
 </script>
 <style lang="scss">
+ul,
+ul li {
+  list-style-type: inherit;
+}
+ol {
+  list-style-type: decimal;
+}
+ol li {
+  list-style-type: inherit;
+}
+ul,
+ol {
+  padding-left: 20px;
+}
 :root:root {
   --van-toast-text-color: #000;
 }
