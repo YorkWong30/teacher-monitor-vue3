@@ -125,7 +125,7 @@ service.interceptors.response.use(
             useUserStore()
               .logOut()
               .then(() => {
-                location.href = "/login";
+                location.href = "/";
               });
           })
           .catch(() => {
