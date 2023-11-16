@@ -181,8 +181,8 @@ const onChange = () => {
 </script>
 <style lang="scss">
 :root {
-  --van-popup-close-icon-size: 24px;
-  --van-popup-close-icon-margin: 15px;
+  // --van-popup-close-icon-size: 24px;
+  // --van-popup-close-icon-margin: 15px;
 }
 .title-box--flow {
   height: 50px;

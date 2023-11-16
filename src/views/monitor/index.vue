@@ -1,6 +1,7 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
     <div class="monitor-box">
+      <van-image-preview v-model:show="show"> </van-image-preview>
       <van-nav-bar
         title="医学模拟"
         style="background-color: #235de6"
@@ -90,6 +91,7 @@ import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import controlArea from "./components/control-area";
 import fixedStep from "./components/fixed-step";
+import { ImagePreview } from "vant";
 
 import inquiry from "./components/tab-components/inquiry";
 import tabCheck from "@/views/monitor/components/tab-components/tab-check";
@@ -115,14 +117,17 @@ import {
 const currentPersonId = ref(230324); //当前的学员id
 const themeVars = reactive({
   toastTextColor: "#000000",
-  popupBackground: "#000000",
+  // popupBackground: "#000000",
   navBarBackground: "#235de6",
-  paddingMd: "10px",
+  // paddingMd: "10px",
   navBarTitleTextColor: "#fff",
 });
 const query = ref(undefined);
 const active = ref(2);
 const firstWorkflowId = ref(1); //初始的workflowId
+
+const show = ref(false);
+
 //监听路由参数
 watch(
   route,

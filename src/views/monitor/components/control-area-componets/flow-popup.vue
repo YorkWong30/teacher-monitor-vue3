@@ -29,7 +29,6 @@
 </template>
 <script setup>
 import { defineProps, defineEmits, watch, ref } from "vue";
-import { ImagePreview, showImagePreview } from "vant";
 
 const props = defineProps({
   workflowChart: {

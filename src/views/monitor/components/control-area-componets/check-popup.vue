@@ -56,11 +56,12 @@ import { ImagePreview, showImagePreview } from "vant";
 const themeVars = reactive({
   popupCloseIconSize: "24px",
   popupCloseIconMargin: "15px",
-  background2: "rgba(0, 0, 0, 0.7)",
+  // background2: "rgba(0, 0, 0, 0.7)",
 });
 const props = defineProps({
   checkReport: {
     type: Object,
+    default: () => {},
   },
   show: {
     type: Boolean,
@@ -79,10 +80,10 @@ watch(
         checkReportImageList.value.push(element.url);
       });
     }
-    console.log(";checkReportImageList..", checkReportImageList);
   },
   {
     immediate: true,
+    deep: true,
   }
 );
 const emits = defineEmits(["update:show", "onPushed"]);

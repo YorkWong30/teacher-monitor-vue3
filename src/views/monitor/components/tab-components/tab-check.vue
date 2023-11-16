@@ -1,5 +1,6 @@
 <template>
   <div class="check-box">
+
     <div class="point">
       <div
         class="point-item"
@@ -83,7 +84,6 @@ watch(
     immediate: true,
   }
 );
-
 // 查看报告单
 const onImage = (item, index) => {
   console.log(" (item, index) ..", item, index);
@@ -102,8 +102,8 @@ const send = (item, index) => {
 </script>
 <style lang="scss">
 :root {
-  --van-popup-close-icon-size: 24px;
-  --van-popup-close-icon-margin: 15px;
+  // --van-popup-close-icon-size: 24px;
+  // --van-popup-close-icon-margin: 15px;
 }
 .title-box--flow {
   height: 60px;
