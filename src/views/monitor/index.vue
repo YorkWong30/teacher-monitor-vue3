@@ -1,6 +1,9 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
-    <div class="monitor-box">
+    <div
+      class="monitor-box"
+      v-if="data.workflowList && data.workflowList.length"
+    >
       <van-image-preview v-model:show="show"> </van-image-preview>
       <van-nav-bar
         title="医学模拟"
@@ -119,6 +122,7 @@ import {
 import {
   showToast,
   showLoadingToast,
+  closeToast,
   showSuccessToast,
   showFailToast,
 } from "vant";
@@ -182,26 +186,7 @@ const data = reactive({
 
 //当前 workflow 对象
 const curWorkFlowObj = ref({});
-const tabList = ref([
-  {
-    index: 0,
-    title: "问诊对话",
-    icon: "chat-tag.png",
-    display: true,
-  },
-  {
-    index: 1,
-    title: "体检结果",
-    icon: "tijian.png",
-    display: true,
-  },
-  {
-    index: 2,
-    title: "辅助检查",
-    icon: "check.png",
-    display: true,
-  },
-]);
+
 const initPushedReports = () => {
   PushedReports.value = localStorage.getItem(
     `${currentPersonId.value}-${query.value.diseaseId}`
@@ -224,11 +209,17 @@ const initPushedReports = () => {
 //初始化
 const initPage = () => {
   return new Promise((resolve, reject) => {
+    showLoadingToast({
+      message: "初始化中...",
+      forbidClick: true,
+      loadingType: "spinner",
+    });
     let params = {
       diseaseId: query.value?.diseaseId,
     };
     init(params)
       .then((res) => {
+        closeToast();
         data.physicalExam = res.data?.physicalExam;
         data.examPoint = res.data?.examPoint;
         data.inquiry = res.data?.inquiry;
@@ -321,7 +312,7 @@ const emitSuccess = (item) => {
   teacherPushWorkflow(params).then((res) => {
     showSuccessToast({
       message: "流程推送成功",
-      duration: 800,
+      duration: 400,
     });
   });
 };
@@ -420,9 +411,9 @@ const updateMonitor = (e) => {
   teacherPushMonitor(params).then((res) => {});
 };
 
-onMounted(() => {
+onMounted(async () => {
   initPushedReports();
-  initPage();
+  await initPage();
 });
 </script>
 <style lang="scss">
