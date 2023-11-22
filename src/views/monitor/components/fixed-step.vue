@@ -3,8 +3,14 @@
     <div class="slider-con" v-for="item in renderList" :key="item.workflowId">
       <div class="des x-c">
         <div class="more-t">
-          <span>下个环节：</span>
-          <span class="blue">{{ item?.content }}</span>
+          <span
+            :style="{
+              color: item?.buttonStyle
+                ? JSON.parse(`${item?.buttonStyle}`).color
+                : '#007fe7',
+            }"
+            >{{ item?.content }}</span
+          >
         </div>
       </div>
       <slider-unlock @success="onSuccess" :item="item"></slider-unlock>
@@ -28,7 +34,6 @@ const props = defineProps({
 
 const emit = defineEmits(["emitSuccess"]);
 const onSuccess = (e) => {
- 
   setTimeout(() => {
     console.log("e..", e);
     emit("emitSuccess", e);
@@ -36,7 +41,6 @@ const onSuccess = (e) => {
 };
 </script>
 <style lang="scss">
-
 .step-box {
   padding: 20px;
   background-color: #e4e9f3;
@@ -56,7 +60,7 @@ const onSuccess = (e) => {
     color: #8c8c8c;
   }
   .blue {
-    color: #007fe7;
+    color: red;
   }
 }
 </style>

@@ -18,7 +18,13 @@
         @onPush="onPush"
         @onReset="onReset"
         @updateMonitor="updateMonitor"
+        @updateDetailMiniPopup="updateDetailMiniPopup"
       ></control-area>
+
+      <detail-popup
+        v-model:show="showDetailMiniPopup"
+        :data="showDetailMiniPopup_data"
+      ></detail-popup>
 
       <!-- tab切换区 -->
       <div
@@ -43,7 +49,7 @@
               <template v-slot:title>
                 <div class="x-f">
                   <img
-                    v-if="active == tab.moduleId"
+                    v-if="active == tab.moduleId && tab.icon"
                     style="width: 32px; height: 32px"
                     :src="imageUrl(tab.icon)"
                     mode="scaleToFill"
@@ -52,8 +58,11 @@
                 </div>
               </template>
               <div style="" class="common-tab">
-                <!-- 大图 -->
-                <inquiry v-show="tab.style === 1" :propList="tab"></inquiry>
+                <inquiry
+                  v-show="tab.style === 1"
+                  :propList="tab"
+                  @updateDetailMiniPopup="updateDetailMiniPopup"
+                ></inquiry>
 
                 <!-- 辅助检查 -->
                 <tab-check
@@ -90,8 +99,8 @@
 import { onMounted, reactive, ref, toRefs, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import controlArea from "./components/control-area";
+import detailPopup from "./components/detail-popup.vue";
 import fixedStep from "./components/fixed-step";
-import { ImagePreview } from "vant";
 
 import inquiry from "./components/tab-components/inquiry";
 import tabCheck from "@/views/monitor/components/tab-components/tab-check";
@@ -127,6 +136,14 @@ const active = ref(2);
 const firstWorkflowId = ref(1); //初始的workflowId
 
 const show = ref(false);
+
+const showDetailMiniPopup = ref(false);
+const showDetailMiniPopup_data = ref(undefined);
+
+const updateDetailMiniPopup = (data) => {
+  showDetailMiniPopup_data.value = data;
+  showDetailMiniPopup.value = true;
+};
 
 //监听路由参数
 watch(
@@ -256,12 +273,15 @@ const filterDataByWorkflowId = (workflowIdParams, arr) => {
 //after update CurWorkFlowObj,we need some action;
 const dealWidthCurWorkFlowObj = () => {
   console.log("examPointList.value", examPointList.value);
+  console.log("curWorkFlowObj.value", curWorkFlowObj.value);
+
   examPointList.value.splice(0);
   if (curWorkFlowObj.value && curWorkFlowObj.value?.moduleList?.length) {
     curWorkFlowObj.value?.moduleList.forEach((item, index, arr) => {
       //赋值顶部考点
       if (arr[index].moduleId === 1) {
-        examPointList.value = arr[index].pointList || [];
+        examPointList.value =
+          JSON.parse(JSON.stringify(arr[index].pointList)) || [];
       }
 
       //辅助检查的报告推送状态修改
@@ -453,5 +473,8 @@ ol {
   margin: 0 auto;
   background-color: #ffffff;
   border-radius: 0 0 6px 6px;
+}
+.van-tabs__nav--card {
+  margin: 0 10px;
 }
 </style>

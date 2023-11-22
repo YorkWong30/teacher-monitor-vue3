@@ -1,18 +1,16 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
     <van-popup
-      style="width: 100vw; height: 40vh"
       :show="show"
       :close-on-click-overlay="false"
       :style="{ padding: '0px' }"
-      closeable
       @close="close"
     >
       <div class="check-box">
         <div class="title-box--flow van-hairline--bottom x-c bold">
           <div>检查报告单</div>
         </div>
-        <van-grid :border="false" clickable column-num="5">
+        <van-grid :border="false" clickable column-num="5" class="grid-content">
           <van-grid-item
             v-for="(item, index) in checkReport?.reportList"
             :key="item?.reportId"
@@ -36,16 +34,28 @@
               :disabled="item.isSend"
               @click="send(item, index)"
               style="
-                height: 20px;
+                height: 25px;
                 color: #fff;
-                width: 40px;
-                font-size: 10px;
+                width: 60px;
+                font-size: 14px;
                 padding: 0;
               "
               >{{ item.isSend ? "已推送" : "推送" }}</van-button
             >
           </van-grid-item>
         </van-grid>
+        <div class="footer-box x-ac">
+          <van-button size="mini" type="primary" plain @click="close"
+            >关闭弹窗</van-button
+          >
+          <!-- <van-button
+            :disabled="updateButtonDisabled"
+            size="small"
+            type="primary"
+            @click="update"
+            >确定更新</van-button
+          > -->
+        </div>
       </div>
     </van-popup>
   </van-config-provider>
@@ -110,17 +120,24 @@ const send = (item, index) => {
 </script>
 <style lang="scss" scoped>
 .title-box--flow {
+  font-size: 26px;
   height: 60px;
-  position: sticky;
-  top: 0;
-  z-index: 1;
   background-color: #ffffff;
 }
 .check-box {
   width: 100%;
-  overflow-y: auto;
-  height: 100%;
   border-radius: 6px;
   background-color: #ffffff;
+}
+.footer-box {
+  width: 100%;
+  height: 70px;
+  padding: 10px 0;
+}
+
+.grid-content {
+  max-height: 400px;
+  overflow-y: auto;
+  width: 100%;
 }
 </style>

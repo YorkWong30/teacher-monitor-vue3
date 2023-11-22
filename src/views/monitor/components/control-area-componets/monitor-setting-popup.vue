@@ -1,10 +1,9 @@
 <template>
   <van-popup
-    style="width: 100vw; height: 55vh"
+    style="width: 100vw; height: 60vh"
     :show="show"
     :style="{ padding: '0px' }"
     :close-on-click-overlay="false"
-    closeable
     @close="close"
   >
     <div class="monitor-box">
@@ -17,13 +16,14 @@
           v-for="(item, index) in sliderObj"
           :key="index"
         >
-          <div class="x-c type-title" :style="{ color: item.color }">
-            {{ item.typeTitle }}
+          <div class="y-ac type-title" :style="{ color: item.color }">
+            <span>{{ item.typeTitle }}</span>
+            <span class="bold"> {{ item.value }}</span>
           </div>
-          <div class="x-f">
+          <div class="x-f" style="flex: 3">
             <div class="min">{{ item.min }}</div>
             <van-slider
-              style="width: 300px; margin: 0 13px"
+              style="margin: 0 13px; width: 100%"
               :min="item.min"
               :max="item.max"
               v-model="item.value"
@@ -49,17 +49,18 @@
                 </div>
               </template>
             </van-slider>
+
             <div class="max">{{ item.max }}</div>
           </div>
         </div>
       </div>
       <div class="footer-box x-ac">
-        <van-button size="small" type="primary" plain @click="close"
+        <van-button size="mini" type="primary" plain @click="close"
           >关闭弹窗</van-button
         >
         <van-button
           :disabled="updateButtonDisabled"
-          size="small"
+          size="mini"
           type="primary"
           @click="update"
           >确定更新</van-button
@@ -84,7 +85,7 @@ const sliderObj = ref({
   },
   BP: {
     type: "BP",
-    typeTitle: "血压",
+    typeTitle: "收缩压,舒张压",
     color: "#FF0A08",
     value: [20, 80],
     min: 0,
@@ -179,7 +180,7 @@ const onChange = () => {
   monitorData.value.BP = sliderObj.value.BP.value;
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 :root {
   // --van-popup-close-icon-size: 24px;
   // --van-popup-close-icon-margin: 15px;
@@ -187,6 +188,7 @@ const onChange = () => {
 .title-box--flow {
   height: 50px;
   position: sticky;
+  font-size: 26px;
   top: 0;
   z-index: 1;
   background-color: #ffffff;
@@ -205,6 +207,7 @@ const onChange = () => {
     .slider-item {
       width: 100%;
       height: 40px;
+      gap: 20px;
     }
   }
   .footer-box {
@@ -225,10 +228,12 @@ const onChange = () => {
   background-color: #ffffff;
 }
 .type-title {
-  width: 89px;
-  height: 50px;
+  flex: 1;
+  // height: 50px;
   background-color: #000000;
   border-radius: 4px;
+  padding: 5px 0;
+  box-sizing: border-box;
 }
 
 .min,

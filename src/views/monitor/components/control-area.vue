@@ -4,34 +4,35 @@
       <van-col span="4">
         <div class="common-col head">
           <img :src="imageUrl('head.png')" mode="scaleToFill" />
+
           <div class="id white">ID.230324</div>
         </div>
       </van-col>
       <van-col span="8">
         <div class="common-col monitor x-ac">
-          <img :src="imageUrl('monitor.png')" mode="scaleToFill" />
+          <!-- <img :src="imageUrl('monitor.png')" mode="scaleToFill" /> -->
+          <img src="@/assets/images/monitor.gif" mode="scaleToFill" />
           <div class="y-ac" style="height: 90%; box-sizing: border-box">
             <div class="f14">心电监护仪</div>
             <div class="x-f">
-              <van-switch
+              <!-- <van-switch
                 v-model="monitorIsOpen"
+                disabled
                 active-color="#74C818"
                 inactive-color="#000000"
                 size="15px"
-              />
+              /> -->
               <van-button
                 @click="doMonitorSettingShow"
-                size="mini"
+                size="small"
                 plain
                 type="default"
                 :disabled="!monitorIsOpen"
                 style="
-                  height: 16px;
+                  height: 26px;
+                  font-size: 20px;
                   color: #000;
-                  width: 30px;
-                  font-size: 10px;
-                  padding: 0;
-                  margin-left: 5px;
+                  background: #fff;
                 "
                 >设置</van-button
               >
@@ -51,19 +52,39 @@
       ></van-col>
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="reset">
-          <div class="white f14">模拟重置</div>
+          <div class="white f14">结束训练</div>
           <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
       ></van-col>
     </van-row>
     <div class="second-box">
-      <!-- <div class="title-box van-hairline--bottom x-f">
-        <div class="more-t">{{ examPointList[0]?.point }}</div>
-      </div> -->
+      <div class="title-box x-f pre3D-light">
+        <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>
+      </div>
       <div class="list-box">
+        <div
+          class="detail-button"
+          v-if="
+            examPointList &&
+            examPointList.length &&
+            examPointList[0]?.pointType === 2 &&
+            examPointList[0]?.point
+          "
+          @click="showDetailMini(examPointList[0]?.point)"
+        >
+          <van-icon
+            name="question-o"
+            color="#1987E1"
+            style="margin-right: 6px"
+          />考点详情
+        </div>
         <div
           v-if="examPointList && examPointList.length"
           class="list-item"
-          v-html="examPointList[0]?.point"
+          v-html="
+            examPointList[0]?.pointType === 1
+              ? examPointList[0]?.point
+              : examPointList[0]?.pointMini
+          "
         ></div>
         <div v-else class="list-item">
           当前环节无考点，老师可根据实际情况进行考察。
@@ -118,15 +139,18 @@ const props = defineProps({
     required: true,
   },
 });
-const textF = ref(
-  "<ul>\r\n\t<li>病史采集</li>\r\n\t<li>体格检查</li>\r\n\t</ul>"
-);
+
 const monitorIsOpen = ref(true); //monitor是否开启
 const showCheckPopup = ref(false); //辅助检查弹窗是否开启
 const showFlowPopup = ref(false); //步骤图 popup 是否打开
 const showMonitorSettingPopup = ref(false); //心电监护仪参数控制板是否开启
 
-const emits = defineEmits(["onPush", "onReset", "updateMonitor"]);
+const emits = defineEmits([
+  "onPush",
+  "onReset",
+  "updateMonitor",
+  "updateDetailMiniPopup",
+]);
 //查看流程
 const doFlowShow = () => {
   showFlowPopup.value = true;
@@ -146,6 +170,10 @@ const doMonitorSettingShow = () => {
 
 const onPushed = (item) => {
   emits("onPush", item);
+};
+
+const showDetailMini = (data) => {
+  emits("updateDetailMiniPopup", data);
 };
 
 const reset = () => {
@@ -168,9 +196,6 @@ const updateMonitor = (e) => {
 };
 </script>
 <style lang="scss" scoped>
-:root {
-  --van-switch-width: 30px;
-}
 .control-box {
   width: 100%;
   height: 343px;
@@ -223,23 +248,41 @@ const updateMonitor = (e) => {
   border-radius: 6px;
   margin: 10px 0;
   box-sizing: border-box;
+  padding: 10px;
+  box-sizing: border-box;
+  position: relative;
+  .detail-button {
+    position: absolute;
+    width: 100px;
+    height: 32px;
+    line-height: 32px;
+    background-color: #f3f6f9;
+    color: #1987e1;
+    font-size: 14px;
+    border-radius: 18px 0px 0px 18pt;
+    right: 0px;
+    bottom: 4%;
+    z-index: 999;
+    text-align: center;
+  }
   .title-box {
-    padding: 5px 20px;
-
+    padding: 5px;
     box-sizing: border-box;
     width: 100%;
-    height: 56px;
-    line-height: 20px;
+    height: 40px;
     text-align: left;
-    font-size: 16px;
-    color: #000000;
+    font-size: 24px;
+    line-height: 30px;
+    color: #fff;
+    background: #235de6;
+    border-radius: 8px;
     font-weight: bold;
   }
   .list-box {
-    height: 100%;
+    height: calc(100% - 40px);
+    width: 100%;
+    overflow-x: hidden;
     overflow-y: auto;
-    padding: 10px 20px;
-    box-sizing: border-box;
 
     .list-item {
       color: #000;

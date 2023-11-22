@@ -1,6 +1,5 @@
 <template>
   <div class="check-box">
-
     <div class="point">
       <div
         class="point-item"
@@ -47,10 +46,10 @@
           :disabled="item.isSend"
           @click="send(item, index)"
           style="
-            height: 20px;
+            height: 25px;
             color: #fff;
-            width: 40px;
-            font-size: 10px;
+            width: 60px;
+            font-size: 14px;
             padding: 0;
           "
           >{{ item.isSend ? "已推送" : "推送" }}</van-button
@@ -100,7 +99,7 @@ const send = (item, index) => {
   emits("onPush", item);
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 :root {
   // --van-popup-close-icon-size: 24px;
   // --van-popup-close-icon-margin: 15px;

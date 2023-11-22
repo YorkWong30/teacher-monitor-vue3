@@ -1,8 +1,12 @@
 <template>
   <div>
     <div id="box" ref="box">
-      <div class="bgColor" ref="bgColor"></div>
-      <div class="txt" ref="txt">进入下一环节</div>
+      <div
+        class="bgColor"
+        ref="bgColor"
+        :style="{ backgroundColor: currentThemeColor }"
+      ></div>
+      <div class="txt" ref="txt">{{ item?.buttonText || "进入下一环节" }}</div>
       <!--给i标签添加上相应字体图标的类名即可-->
       <div class="slider" ref="slider">
         <van-icon
@@ -13,7 +17,7 @@
           size="25px"
         />
         <van-icon
-          color="#007fe7"
+          :color="currentThemeColor"
           v-show="isSuccess"
           ref="icon"
           name="success"
@@ -38,11 +42,22 @@ const slider = ref(null);
 const icon = ref(null);
 const successMoveDistance = ref(null); //解锁需要滑动的距离
 const downX = ref(null); //用于存放鼠标按下时的位置
+
+const currentThemeColor = ref("#007fe7");
+if (props.item?.buttonStyle) {
+  let stringifyStr = `${props.item?.buttonStyle}`;
+  currentThemeColor.value = JSON.parse(stringifyStr).color;
+}
+
 onMounted(() => {
   successMoveDistance.value = box.value.offsetWidth - slider.value.offsetWidth; //解锁需要滑动的距离
   //三、给滑块添加鼠标按下事件
   slider.value.onmousedown = mousedownHandler;
   slider.value.ontouchstart = mousedownHandler;
+
+  //初始化 bgColor slider
+  bgColor.value.style.backgroundColor = currentThemeColor.value;
+  slider.value.style.backgroundColor = currentThemeColor.value;
 });
 function mousedownHandler(e) {
   bgColor.value.style.transition = "";
@@ -92,7 +107,7 @@ function mousemoveHandler(e) {
 function mouseupHandler(e) {
   if (!isSuccess.value) {
     bgColor.value.style.width = 0 + "px";
-    slider.value.style.left = 0 + "px";
+    slider.value.style.left = 4 + "px";
     bgColor.value.style.transition = "width 0.5s linear";
     slider.value.style.transition = "left 0.5s linear";
   }
@@ -104,13 +119,12 @@ function mouseupHandler(e) {
 }
 //五、定义一个滑块解锁成功的方法
 function success() {
-  console.log("props...", props);
   isSuccess.value = true;
   txt.value.innerHTML = "解锁成功";
   txt.value.style.left = "0px";
   txt.value.style.right = "26px";
 
-  bgColor.value.style.backgroundColor = "#007fe7";
+  bgColor.value.style.backgroundColor = currentThemeColor.value;
   bgColor.value.style.width = "100%";
   bgColor.value.style.borderRadius = "30px";
 
@@ -149,7 +163,6 @@ function success() {
   top: 0;
   width: 0px;
   height: 52px;
-  background-color: #007fe7;
   border-radius: 200px 0 0 200px;
 }
 .txt {
@@ -170,7 +183,6 @@ function success() {
   top: 4px;
   width: 44px;
   height: 44px;
-  background: #007fe7;
   text-align: center;
   cursor: move;
 }
