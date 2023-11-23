@@ -42,7 +42,6 @@ const close = () => {
   border-radius: 6px;
   font-size: 16px;
   text-align: left;
-  width: inherit;
   line-height: 30px;
   padding: 10px;
   box-sizing: border-box;

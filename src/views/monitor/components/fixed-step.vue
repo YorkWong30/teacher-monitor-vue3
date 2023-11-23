@@ -3,7 +3,7 @@
     <div class="slider-con" v-for="item in renderList" :key="item.workflowId">
       <slider-unlock @success="onSuccess" :item="item"></slider-unlock>
 
-      <div class="des x-c" style="filter: grayscale(0.4)">
+      <!-- <div class="des x-c" style="filter: grayscale(0.4)">
         <div class="more-t">
           <span
             :style="{
@@ -14,7 +14,7 @@
             >{{ item?.content }}</span
           >
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
   <div class="step-box x-c" v-else>训练结束✅</div>

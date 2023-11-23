@@ -6,7 +6,9 @@
         ref="bgColor"
         :style="{ backgroundColor: currentThemeColor }"
       ></div>
-      <div class="txt" ref="txt">{{ item?.buttonText || "进入下一环节" }}</div>
+      <div class="txt more-t x-c" ref="txt">
+        {{ item?.buttonText || "进入下一环节" }}
+      </div>
       <!--给i标签添加上相应字体图标的类名即可-->
       <div class="slider" ref="slider">
         <van-icon
@@ -167,14 +169,15 @@ function success() {
 }
 .txt {
   position: absolute;
-  left: 26px;
+  left: 4.333333vw;
   width: 100%;
   font-weight: bold;
-  height: 52px;
-  font-size: 13px;
-  line-height: 52px;
+  height: 8.666667vw;
+  font-size: 2.166667vw;
   color: #fff;
-  text-align: center;
+  /* text-align: center; */
+  padding: 0 50px 0 30px;
+  box-sizing: border-box;
 }
 .slider {
   border-radius: 30px;
