@@ -5,15 +5,16 @@
       v-if="data.workflowList && data.workflowList.length"
     >
       <van-image-preview v-model:show="show"> </van-image-preview>
-      <van-nav-bar
+      <!-- <van-nav-bar
         title="医学模拟"
         style="background-color: #235de6"
         :border="false"
         fixed
         placeholder
-      />
+      /> -->
       <!-- 顶部控制区 -->
       <control-area
+        ref="controlAreaRef"
         :curWorkFlowObj="curWorkFlowObj"
         :examPointList="examPointList"
         :workflowChart="data.workflowChart"
@@ -28,6 +29,11 @@
         v-model:show="showDetailMiniPopup"
         :data="showDetailMiniPopup_data"
       ></detail-popup>
+
+      <fixed-step
+        :renderList="curWorkFlowObj?.childList"
+        @emitSuccess="emitSuccess"
+      ></fixed-step>
 
       <!-- tab切换区 -->
       <div
@@ -45,7 +51,6 @@
           color="#ffffff"
           title-inactive-color="#595959"
           title-active-color="#000000"
-          shrink
         >
           <block v-for="tab in curWorkFlowObj?.moduleList" :key="tab.moduleId">
             <van-tab v-if="tab?.moduleId !== 1" :name="tab.moduleId">
@@ -91,11 +96,8 @@
           </div>
         </van-tabs>
       </div>
-      <fixed-step
-        :renderList="curWorkFlowObj?.childList"
-        @emitSuccess="emitSuccess"
-      ></fixed-step></div
-  ></van-config-provider>
+    </div></van-config-provider
+  >
 </template>
 
 <script setup>
@@ -148,6 +150,13 @@ const updateDetailMiniPopup = (data) => {
   showDetailMiniPopup_data.value = data;
   showDetailMiniPopup.value = true;
 };
+
+const controlAreaRef = ref(null);
+//初始化弹出案例资料
+
+setTimeout(() => {
+  controlAreaRef.value.doFlowShow();
+}, 1000);
 
 //监听路由参数
 watch(
@@ -445,9 +454,9 @@ ol {
 .van-tab--card {
   border-radius: 6px 6px 0 0;
 }
-.van-tabs__wrap {
-  display: flex;
-}
+// .van-tabs__wrap {
+//   // display: flex;
+// }
 .van-nav-bar__title {
   // color: #ffffff;
   font-size: 22px;
@@ -459,7 +468,7 @@ ol {
   position: relative;
 }
 .common-tab {
-  height: 335px;
+  height: calc(100vh - 280px - 80px - 70px);
   width: calc(100vw - 20px);
   margin: 0 auto;
   background-color: #ffffff;

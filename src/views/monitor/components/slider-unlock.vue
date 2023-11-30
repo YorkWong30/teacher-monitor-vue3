@@ -152,11 +152,10 @@ function success() {
   width: 100%;
   height: 60px;
   margin: 0 auto;
-  margin-top: 10px;
-  background-color: #cdd1da;
+  background-color: #1f54cf;
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.2);
   border-radius: 30px;
-  border: 4px solid #f1f3f9;
+  border: 4px solid #86a6f1;
   box-sizing: border-box;
 }
 .bgColor {

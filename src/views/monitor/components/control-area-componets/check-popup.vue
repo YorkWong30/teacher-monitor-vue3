@@ -3,14 +3,14 @@
     <van-popup
       :show="show"
       :close-on-click-overlay="false"
-      :style="{ padding: '0px' }"
       @close="close"
+      style="background-color: transparent"
     >
       <div class="check-box">
         <div class="title-box--flow van-hairline--bottom x-c bold">
           <div>检查报告单</div>
         </div>
-        <van-grid :border="false" clickable column-num="5" class="grid-content">
+        <van-grid :border="false" clickable column-num="3" class="grid-content">
           <van-grid-item
             v-for="(item, index) in checkReport?.reportList"
             :key="item?.reportId"
@@ -21,8 +21,8 @@
               </template>
             </van-image>
             <div
-              style="height: 35px; width: 100%; font-size: 12px; color: #595959"
-              class="more-t"
+              style="height: 50px; width: 100%; font-size: 18px; color: #595959"
+              class="more-t x-c"
             >
               {{ item?.reportName }}
             </div>
@@ -34,10 +34,11 @@
               :disabled="item.isSend"
               @click="send(item, index)"
               style="
-                height: 25px;
+                height: 32px;
+                padding: 5px;
                 color: #fff;
-                width: 60px;
-                font-size: 14px;
+                width: 70px;
+                font-size: 17px;
                 padding: 0;
               "
               >{{ item.isSend ? "已推送" : "推送" }}</van-button
@@ -45,9 +46,7 @@
           </van-grid-item>
         </van-grid>
         <div class="footer-box x-ac">
-          <van-button size="mini" type="primary" plain @click="close"
-            >关闭弹窗</van-button
-          >
+          <van-icon name="close" color="#ffffff" size="45px" @click="close" />
           <!-- <van-button
             :disabled="updateButtonDisabled"
             size="small"
@@ -127,17 +126,18 @@ const send = (item, index) => {
 .check-box {
   width: 100%;
   border-radius: 6px;
-  background-color: #ffffff;
 }
 .footer-box {
   width: 100%;
   height: 70px;
   padding: 10px 0;
+  background-color: transparent;
 }
 
 .grid-content {
-  max-height: 400px;
+  height: 550px;
   overflow-y: auto;
+  background-color: #ffffff;
   width: 100%;
 }
 </style>

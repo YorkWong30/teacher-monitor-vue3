@@ -20,7 +20,7 @@
     <van-grid
       :border="false"
       clickable
-      column-num="5"
+      column-num="3"
       v-if="propList?.reportList && propList.reportList.length"
     >
       <van-grid-item
@@ -33,8 +33,8 @@
           </template>
         </van-image>
         <div
-          style="height: 35px; width: 100%; font-size: 12px; color: #595959"
-          class="more-t"
+          style="height: 50px; width: 100%; font-size: 18px; color: #595959"
+          class="more-t x-c"
         >
           {{ item?.reportName }}
         </div>
@@ -46,10 +46,11 @@
           :disabled="item.isSend"
           @click="send(item, index)"
           style="
-            height: 25px;
+            height: 32px;
+            padding: 5px;
             color: #fff;
-            width: 60px;
-            font-size: 14px;
+            width: 70px;
+            font-size: 17px;
             padding: 0;
           "
           >{{ item.isSend ? "已推送" : "推送" }}</van-button

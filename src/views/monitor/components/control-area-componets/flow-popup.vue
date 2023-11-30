@@ -6,22 +6,31 @@
     @close="close"
     :style="{ padding: '0px' }"
   >
-    <div class="flow-box">
-      <div
-        class="flow-item"
-        v-for="(flow, flowIndex) in workflowChart?.reportList"
-        :key="flowIndex"
-      >
-        <div class="step x-f">
-          <span class="bold">阶段 {{ flowIndex + 1 }} </span>
+    <van-tabs class="tab-box" v-model:active="active">
+      <van-tab title="案例流程" class="common-box">
+        <div
+          class="flow-item"
+          v-for="(flow, flowIndex) in workflowChart?.reportList"
+          :key="flowIndex"
+        >
+          <!-- <div class="step x-f">
+              <span class="bold">阶段 {{ flowIndex + 1 }} </span>
+            </div> -->
+          <van-image width="100%" :src="flow?.url">
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
         </div>
-        <van-image width="100%" :src="flow?.url">
-          <template v-slot:loading>
-            <van-loading type="spinner" size="20" />
-          </template>
-        </van-image>
-      </div>
-    </div>
+      </van-tab>
+      <van-tab title="考点指导">
+        <div class="common-box">
+          暂无数据
+          <!-- <div v-for="i in 300">{{ i }}</div> -->
+        </div>
+      </van-tab>
+    </van-tabs>
+
     <div class="close-box x-c">
       <van-icon name="close" color="#ffffff" size="45px" @click="close" />
     </div>
@@ -42,26 +51,39 @@ const props = defineProps({
 
 const emits = defineEmits(["update:show"]);
 
+const active = ref(0);
 const close = () => {
   emits("update:show", false);
 };
 </script>
-<style lang="scss" scoped>
-.flow-box {
+<style lang="scss">
+.van-tabs__content {
+  height: 100%;
+}
+.tab-box {
   width: 100%;
   height: 90%;
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+.common-box {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
   overflow-y: scroll;
   background-color: #ffffff;
-  border-radius: 6px;
-  .flow-item {
-    width: inherit;
-    height: auto;
+  padding: 10px 5px;
+  box-sizing: border-box;
+}
+.flow-item {
+  width: inherit;
+  height: auto;
 
-    .step {
-      height: 36px;
-      font-size: 20px;
-      padding: 0 10px;
-    }
+  .step {
+    height: 36px;
+    font-size: 20px;
+    padding: 0 10px;
   }
 }
 
