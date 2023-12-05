@@ -19,12 +19,13 @@
           label="密码"
           placeholder="请输入密码"
         />
+        <van-field v-model="deviceId" label="设备Id" placeholder="设备Id" />
       </van-cell-group>
     </div>
 
     <div class="the-button x-c">
       <van-button
-        :disabled="username == '' || password == ''"
+        :disabled="username == '' || password == '' || deviceId == ''"
         type="primary"
         size="small"
         :loading="loading"
@@ -51,11 +52,13 @@ const topBgUrl = proxy.imageUrl("login.png");
 const loading = ref(false);
 const username = ref("");
 const password = ref("");
+const deviceId = ref("230324");
 const redirect = ref(undefined);
 
 watch(
   route,
   (newRoute) => {
+    console.log("newRoute..", newRoute);
     redirect.value = newRoute.query && newRoute.query.redirect;
   },
   { immediate: true }
@@ -78,6 +81,8 @@ function doLogin() {
         }
         return acc;
       }, {});
+      otherQueryParams.deviceId = deviceId.value;
+      console.log("otherQueryParams..", otherQueryParams);
       router.push({ path: redirect.value || "/", query: otherQueryParams });
     })
     .catch(() => {

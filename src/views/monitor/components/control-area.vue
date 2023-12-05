@@ -1,13 +1,16 @@
 <template>
   <div class="control-box">
-    <van-row gutter="10">
-      <van-col span="4">
-        <div class="common-col head">
+    <van-row gutter="5">
+      <!-- <van-col span="4">
+        <div class="common-col head x-c">
           <img :src="imageUrl('head.png')" mode="scaleToFill" />
 
-          <div class="id white">ID.230324</div>
+          <div class="id white">
+            <div>设备ID</div>
+            <div class="bold">{{ currentPersonId }}</div>
+          </div>
         </div>
-      </van-col>
+      </van-col> -->
       <van-col span="8">
         <div class="common-col monitor x-ac">
           <!-- <img :src="imageUrl('monitor.png')" mode="scaleToFill" /> -->
@@ -55,6 +58,11 @@
           <div class="white f14">结束训练</div>
           <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
       ></van-col>
+      <van-col span="4">
+        <div class="common-col common-control flow y-bc" @click="change">
+          <div class="white f14">切换病例</div>
+          <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
+      ></van-col>
     </van-row>
     <div class="title-box">
       <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>
@@ -96,6 +104,7 @@
     <flow-popup
       v-model:show="showFlowPopup"
       :workflowChart="workflowChart"
+      :disease="disease"
     ></flow-popup>
 
     <!-- 辅助检查弹框 -->
@@ -121,12 +130,18 @@ import monitorSettingPopup from "./control-area-componets/monitor-setting-popup.
 import { imageUrl } from "@/utils/ruoyi";
 import { showConfirmDialog } from "vant";
 import { teacherPushMonitor } from "@/api/index";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const props = defineProps({
   curWorkFlowObj: {
     type: Object,
     required: true,
   },
   workflowChart: {
+    type: Object,
+    required: true,
+  },
+  disease: {
     type: Object,
     required: true,
   },
@@ -137,6 +152,10 @@ const props = defineProps({
   checkReport: {
     type: Object,
     required: true,
+  },
+  currentPersonId: {
+    type: String,
+    default: "",
   },
 });
 
@@ -188,6 +207,17 @@ const reset = () => {
     .catch(() => {
       // on cancel
     });
+};
+
+const change = () => {
+  showConfirmDialog({
+    title: "提示",
+    message: "是否返回案例列表？",
+  })
+    .then(() => {
+      router.go(-1);
+    })
+    .catch(() => {});
 };
 
 const updateMonitor = (e) => {
@@ -285,6 +315,7 @@ defineExpose({
     padding: 10px 10px 10px 10px;
     box-sizing: border-box;
     position: relative;
+    text-align: left;
     .detail-button {
       position: absolute;
       width: 100px;

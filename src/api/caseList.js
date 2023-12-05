@@ -12,3 +12,15 @@ export function queryDiseaseList(data) {
     data: data,
   });
 }
+//老师端给学员推送_病例切换
+export function teacherPushChangeDisease(data) {
+  return request({
+    url: "/jhcloud-train/emergencyMedicine/teacherPushChangeDisease",
+    headers: {
+      isToken: true,
+      "content-type": "application/json",
+    },
+    method: "post",
+    data: data,
+  });
+}

@@ -16,8 +16,10 @@
       <control-area
         ref="controlAreaRef"
         :curWorkFlowObj="curWorkFlowObj"
+        :currentPersonId="currentPersonId"
         :examPointList="examPointList"
         :workflowChart="data.workflowChart"
+        :disease="data.disease"
         :checkReport="data.checkReport"
         @onPush="onPush"
         @onReset="onReset"
@@ -101,7 +103,7 @@
 </template>
 
 <script setup>
-import { onMounted, reactive, ref, toRefs, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import controlArea from "./components/control-area";
 import detailPopup from "./components/detail-popup.vue";
@@ -129,7 +131,7 @@ import {
   showFailToast,
 } from "vant";
 
-const currentPersonId = ref(230324); //当前的学员id
+const currentPersonId = ref(undefined); //当前的设备id
 const themeVars = reactive({
   toastTextColor: "#000000",
   // popupBackground: "#000000",
@@ -163,7 +165,8 @@ watch(
   route,
   (newRoute) => {
     query.value = newRoute.query;
-    console.log("query.value..", query.value);
+    console.log("monitor index---query.value..", query.value);
+    currentPersonId.value = query.value.deviceId;
   },
   { immediate: true }
 );
@@ -191,6 +194,7 @@ const data = reactive({
   inquiry: undefined,
   checkReport: {},
   workflowChart: undefined,
+  disease: undefined,
 });
 
 //当前 workflow 对象
@@ -233,6 +237,7 @@ const initPage = () => {
         data.examPoint = res.data?.examPoint;
         data.inquiry = res.data?.inquiry;
         data.workflowChart = res.data?.workflowChart;
+        data.disease = res.data?.disease;
         data.workflowList = res.data?.workflowList;
         data.checkReport.reportList = changeReportStatus(
           res.data?.checkReport?.reportList

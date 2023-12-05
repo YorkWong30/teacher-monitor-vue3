@@ -18,7 +18,7 @@ axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: "http://8.130.18.64:8083",
-  // baseURL: "http://192.168.2.231:8083",
+  // baseURL: "http://192.168.2.158:8083",
 
   // 超时
   timeout: 10000,
@@ -110,7 +110,7 @@ service.interceptors.response.use(
     ) {
       return res.data;
     }
-    if (code === 101) {
+    if (code === 101 || code === 111 || code == 1007) {
       console.log("isRelogin..", isRelogin);
       if (1) {
         isRelogin.show = true;

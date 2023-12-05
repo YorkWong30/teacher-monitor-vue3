@@ -10,7 +10,13 @@
         <div class="title-box--flow van-hairline--bottom x-c bold">
           <div>检查报告单</div>
         </div>
-        <van-grid :border="false" clickable column-num="3" class="grid-content">
+        <van-grid
+          :border="false"
+          clickable
+          column-num="3"
+          class="grid-content"
+          v-if="checkReport?.reportList?.length"
+        >
           <van-grid-item
             v-for="(item, index) in checkReport?.reportList"
             :key="item?.reportId"
@@ -45,6 +51,10 @@
             >
           </van-grid-item>
         </van-grid>
+        <div class="grid-content" v-else>
+          <van-empty description="暂无报告" />
+        </div>
+
         <div class="footer-box x-ac">
           <van-icon name="close" color="#ffffff" size="45px" @click="close" />
           <!-- <van-button
@@ -126,6 +136,7 @@ const send = (item, index) => {
 .check-box {
   width: 100%;
   border-radius: 6px;
+  overflow-x: hidden;
 }
 .footer-box {
   width: 100%;
@@ -135,7 +146,8 @@ const send = (item, index) => {
 }
 
 .grid-content {
-  height: 550px;
+  min-width: 90vw;
+  max-height: 550px;
   overflow-y: auto;
   background-color: #ffffff;
   width: 100%;

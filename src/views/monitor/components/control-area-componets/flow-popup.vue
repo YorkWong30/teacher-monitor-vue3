@@ -23,11 +23,8 @@
           </van-image>
         </div>
       </van-tab>
-      <van-tab title="考点指导">
-        <div class="common-box">
-          暂无数据
-          <!-- <div v-for="i in 300">{{ i }}</div> -->
-        </div>
+      <van-tab title="考点指导" class="common-box">
+        <div style="text-align: left" v-html="disease?.point"></div>
       </van-tab>
     </van-tabs>
 
@@ -41,6 +38,9 @@ import { defineProps, defineEmits, watch, ref } from "vue";
 
 const props = defineProps({
   workflowChart: {
+    type: Object,
+  },
+  disease: {
     type: Object,
   },
   show: {
@@ -58,7 +58,7 @@ const close = () => {
 </script>
 <style lang="scss">
 .van-tabs__content {
-  height: 100%;
+  height: calc(100% - var(--van-tabs-line-height));
 }
 .tab-box {
   width: 100%;

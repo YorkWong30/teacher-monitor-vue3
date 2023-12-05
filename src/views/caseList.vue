@@ -34,16 +34,37 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 const searchValue = ref("");
 import { useRoute, useRouter } from "vue-router";
 const route = useRoute();
 const router = useRouter();
-import { queryDiseaseList } from "@/api/caseList";
+import { queryDiseaseList, teacherPushChangeDisease } from "@/api/caseList";
 const chapterList = ref([]);
+
+//当前控制的设备 id
+const currentDeviceId = ref(undefined);
+watch(
+  route,
+  (newRoute) => {
+    console.log("caseList.newRoute.", newRoute);
+    currentDeviceId.value = newRoute.query?.deviceId;
+  },
+  { immediate: true }
+);
+
 // 选择病例，进入monitor
 const toMonitor = (son) => {
-  router.push({ path: "/monitor", query: son });
+  let params = {
+    diseaseId: son.diseaseId,
+    diseaseName: son.diseaseName,
+    personId: currentDeviceId.value,
+    deviceId: currentDeviceId.value,
+  };
+  console.log("params..", params);
+  teacherPushChangeDisease(params).then(() => {
+    router.push({ path: "/monitor", query: params });
+  });
 };
 
 const init = () => {
