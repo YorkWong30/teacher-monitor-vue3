@@ -50,9 +50,9 @@ const userStore = useUserStore();
 
 const topBgUrl = proxy.imageUrl("login.png");
 const loading = ref(false);
-const username = ref("");
-const password = ref("");
-const deviceId = ref("230324");
+const username = ref("14887");
+const password = ref("123456");
+const deviceId = ref("19249");
 const redirect = ref(undefined);
 
 watch(

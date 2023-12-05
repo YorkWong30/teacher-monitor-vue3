@@ -1,7 +1,13 @@
 <template>
   <div class="case-list-box">
     <div style="position: fixed; top: 0; width: 100%; z-index: 99">
-      <van-nav-bar title="九划急症医学模拟" :border="false" />
+      <van-nav-bar
+        title="九划急症医学模拟"
+        :border="false"
+        right-text="退出登录"
+        :left-text="`设备ID${currentDeviceId}`"
+        @click-right="onClickRight"
+      />
       <div class="search-content x-f">
         <van-field
           clearable
@@ -41,6 +47,8 @@ const route = useRoute();
 const router = useRouter();
 import { queryDiseaseList, teacherPushChangeDisease } from "@/api/caseList";
 const chapterList = ref([]);
+import useUserStore from "@/store/modules/user";
+import { showConfirmDialog } from "vant";
 
 //当前控制的设备 id
 const currentDeviceId = ref(undefined);
@@ -74,6 +82,25 @@ const init = () => {
       chapterList.value = result.data.chapterList;
     })
     .catch((err) => {});
+};
+
+const onClickRight = () => {
+  showConfirmDialog({
+    title: "提示",
+    message: "确定退出登录？",
+  })
+    .then(() => {
+      // on confirm
+      useUserStore()
+        .logOut()
+        .then(() => {
+          // location.href = "/";
+          router.go(-1);
+        });
+    })
+    .catch(() => {
+      // on cancel
+    });
 };
 onMounted(() => {
   init();
