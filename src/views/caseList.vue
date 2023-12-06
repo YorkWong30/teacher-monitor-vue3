@@ -81,7 +81,7 @@ const init = () => {
     .then((result) => {
       chapterList.value = result.data.chapterList;
     })
-    .catch((err) => {});
+    .catch(() => {});
 };
 
 const onClickRight = () => {

@@ -55,14 +55,15 @@
       ></van-col>
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="reset">
-          <div class="white f14">结束训练</div>
+          <div class="white f14">重置训练</div>
           <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
       ></van-col>
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="change">
-          <div class="white f14">切换病例</div>
-          <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
-      ></van-col>
+          <div class="white f14">切换案例</div>
+          <!-- <img :src="imageUrl('reset.png')" mode="scaleToFill" />-->
+        </div></van-col
+      >
     </van-row>
     <div class="title-box">
       <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>

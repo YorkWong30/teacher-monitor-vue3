@@ -128,7 +128,7 @@ watch(
   () => props.curCheckList,
   (newVal, oldVal) => {
     updateButtonDisabled.value = true;
-    console.log(newVal, oldVal);
+    console.log("设置监护仪数据", newVal, oldVal);
 
     if (props.curCheckList && props.curCheckList.length) {
       for (let key in sliderObj.value) {
@@ -154,6 +154,9 @@ watch(
       }
       console.log("sliderObj.value..", sliderObj.value);
     }
+  },
+  {
+    immediate: true,
   }
 );
 const emits = defineEmits(["update:show", "updateMonitor"]);
