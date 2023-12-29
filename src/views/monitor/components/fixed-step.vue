@@ -50,6 +50,7 @@ const onSuccess = (e) => {
 .step-box {
   //padding: 20px;
   background-color: #235de6;
+  color: #ffffff;
   box-sizing: border-box;
   width: 100%;
   height: 80px;

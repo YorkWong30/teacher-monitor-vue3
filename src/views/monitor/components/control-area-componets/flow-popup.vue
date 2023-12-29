@@ -23,7 +23,7 @@
           </van-image>
         </div>
       </van-tab>
-      <van-tab title="考点指导" class="common-box">
+      <van-tab title="案例资料" class="common-box">
         <div style="text-align: left" v-html="disease?.point"></div>
       </van-tab>
     </van-tabs>

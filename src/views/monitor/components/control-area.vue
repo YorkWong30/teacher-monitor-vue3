@@ -84,7 +84,7 @@
             name="question-o"
             color="#1987E1"
             style="margin-right: 6px"
-          />考点详情
+          />详 情
         </div>
         <div
           v-if="examPointList && examPointList.length"
@@ -319,7 +319,7 @@ defineExpose({
     text-align: left;
     .detail-button {
       position: absolute;
-      width: 100px;
+      width: 70px;
       height: 32px;
       line-height: 32px;
       background-color: #f3f6f9;

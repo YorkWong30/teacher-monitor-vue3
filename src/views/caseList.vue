@@ -21,21 +21,59 @@
         </van-field>
       </div>
     </div>
+
     <div class="item-box">
       <div class="item" v-for="item in chapterList" :key="item">
         <div class="item-title one-t x-f van-hairline--bottom">
           {{ item.chapter }}
         </div>
         <div
-          class="son-title one-t x-f"
+          class="son-title one-t x-bc"
           v-for="son in item.diseaseList"
           :key="son"
-          @click="toMonitor(son)"
         >
-          {{ son.diseaseName }}
+          <span @click="toMonitor(son)"> {{ son.diseaseName }}</span>
+          <div class="x-f">
+            <span class="self-button" @click.stop="showPoint(son)">
+              「案例详情」
+            </span>
+            <span class="self-button" @click.stop="showProp(son)">
+              「备物清单」
+            </span>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- 备物清单 -->
+    <van-action-sheet
+      v-model:show="propShow"
+      title="备物清单"
+      style="height: 90%"
+    >
+      <div
+        class="store-content fontFCSM"
+        style="text-align: left"
+        v-if="propHTML"
+        v-html="propHTML"
+      ></div>
+      <div class="store-content fontFCSM" v-else>空</div>
+    </van-action-sheet>
+
+    <!-- 案例详情 -->
+    <van-action-sheet
+      v-model:show="pointShow"
+      title="案例详情"
+      style="height: 90%"
+    >
+      <div
+        class="store-content fontFCSM"
+        style="text-align: left"
+        v-if="pointHTML"
+        v-html="pointHTML"
+      ></div>
+      <div class="store-content fontFCSM" v-else>空</div>
+    </van-action-sheet>
   </div>
 </template>
 
@@ -49,7 +87,20 @@ import { queryDiseaseList, teacherPushChangeDisease } from "@/api/caseList";
 const chapterList = ref([]);
 import useUserStore from "@/store/modules/user";
 import { showConfirmDialog } from "vant";
+const propShow = ref(false);
+const propHTML = ref("");
+const showProp = (son) => {
+  console.log("son..", son);
+  propShow.value = true;
+  propHTML.value = son.prop;
+};
 
+const pointShow = ref(false);
+const pointHTML = ref("");
+const showPoint = (son) => {
+  pointShow.value = true;
+  pointHTML.value = son.point;
+};
 //当前控制的设备 id
 const currentDeviceId = ref(undefined);
 watch(
@@ -102,11 +153,26 @@ const onClickRight = () => {
       // on cancel
     });
 };
+
 onMounted(() => {
   init();
 });
 </script>
 <style lang="scss">
+ul,
+ul li {
+  list-style-type: inherit;
+}
+ol {
+  list-style-type: decimal;
+}
+ol li {
+  list-style-type: inherit;
+}
+ul,
+ol {
+  padding-left: 20px;
+}
 :root {
   --van-nav-bar-background: #235de6;
 }
@@ -162,7 +228,6 @@ onMounted(() => {
     .son-title {
       width: 99%;
       max-width: 99%;
-      display: inline-block;
       text-align: left;
       color: #000000;
       font-size: 20px;
@@ -172,5 +237,18 @@ onMounted(() => {
       box-sizing: border-box;
     }
   }
+}
+.store-content {
+  padding: 16px;
+  box-sizing: border-box;
+  min-height: 100%;
+  max-height: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.self-button {
+  color: #168ae9;
+  font-size: 15px;
 }
 </style>

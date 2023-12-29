@@ -49,6 +49,7 @@
         <van-tabs
           v-model:active="active"
           type="card"
+          swipe-threshold="3"
           background="#f2f4fa"
           color="#ffffff"
           title-inactive-color="#595959"
@@ -57,14 +58,16 @@
           <block v-for="tab in curWorkFlowObj?.moduleList" :key="tab.moduleId">
             <van-tab v-if="tab?.moduleId !== 1" :name="tab.moduleId">
               <template v-slot:title>
-                <div class="x-f">
+                <div class="x-f" style="line-height: 20px">
                   <img
                     v-if="active == tab.moduleId && tab.icon"
                     style="width: 32px; height: 32px"
                     :src="imageUrl(tab.icon)"
                     mode="scaleToFill"
                   />
-                  <span>{{ tab.moduleName }}</span>
+                  <div class="more-t">
+                    {{ tab.moduleName }}
+                  </div>
                 </div>
               </template>
               <div style="" class="common-tab">
@@ -155,9 +158,10 @@ const updateDetailMiniPopup = (data) => {
 
 const controlAreaRef = ref(null);
 //初始化弹出案例资料
-
 setTimeout(() => {
-  controlAreaRef.value.doFlowShow();
+  if (controlAreaRef.value) {
+    controlAreaRef.value.doFlowShow();
+  }
 }, 1000);
 
 //监听路由参数

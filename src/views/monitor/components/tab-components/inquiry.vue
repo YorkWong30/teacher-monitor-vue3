@@ -10,11 +10,8 @@
         propList?.pointList[0]?.point
       "
     >
-      <van-icon
-        name="question-o"
-        color="#1987E1"
-        style="margin-right: 6px"
-      />操作详情
+      <van-icon name="question-o" color="#1987E1" style="margin-right: 6px" />详
+      情
     </div>
     <div class="the-box">
       <div class="point">
@@ -65,7 +62,7 @@ const showDetailMini = (data) => {
   position: relative;
   .detail-button {
     position: absolute;
-    width: 100px;
+    width: 70px;
     height: 32px;
     line-height: 32px;
     background-color: #f3f6f9;
