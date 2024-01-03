@@ -86,7 +86,19 @@
               </div>
             </van-tab>
           </block>
-          <div
+          <van-tab name="9999">
+            <template v-slot:title>
+              <div class="x-f" style="line-height: 20px">
+                <van-icon v-if="active == 9999" size="26" name="description" />
+
+                <div class="more-t">关键核查表</div>
+              </div>
+            </template>
+            <div class="common-tab">
+              <key-checklist :checkList="data.checkList"></key-checklist>
+            </div>
+          </van-tab>
+          <!-- <div
             v-if="
               !curWorkFlowObj?.moduleList ||
               (curWorkFlowObj?.moduleList.length == 1 &&
@@ -98,7 +110,7 @@
             style="background-color: #fff"
           >
             当前环节无工具项
-          </div>
+          </div> -->
         </van-tabs>
       </div>
     </div></van-config-provider
@@ -112,6 +124,7 @@ import controlArea from "./components/control-area";
 import detailPopup from "./components/detail-popup.vue";
 import fixedStep from "./components/fixed-step";
 
+import keyChecklist from "./components/tab-components/key-checklist.vue";
 import inquiry from "./components/tab-components/inquiry";
 import tabCheck from "@/views/monitor/components/tab-components/tab-check";
 const route = useRoute();
@@ -143,7 +156,7 @@ const themeVars = reactive({
   navBarTitleTextColor: "#fff",
 });
 const query = ref(undefined);
-const active = ref(2);
+const active = ref(0);
 const firstWorkflowId = ref(1); //初始的workflowId
 
 const show = ref(false);
@@ -158,11 +171,11 @@ const updateDetailMiniPopup = (data) => {
 
 const controlAreaRef = ref(null);
 //初始化弹出案例资料
-setTimeout(() => {
-  if (controlAreaRef.value) {
-    controlAreaRef.value.doFlowShow();
-  }
-}, 1000);
+// setTimeout(() => {
+//   if (controlAreaRef.value) {
+//     controlAreaRef.value.doFlowShow();
+//   }
+// }, 1000);
 
 //监听路由参数
 watch(
@@ -199,6 +212,7 @@ const data = reactive({
   checkReport: {},
   workflowChart: undefined,
   disease: undefined,
+  checkList: [], //关键核查表
 });
 
 //当前 workflow 对象
@@ -240,6 +254,8 @@ const initPage = () => {
         data.physicalExam = res.data?.physicalExam;
         data.examPoint = res.data?.examPoint;
         data.inquiry = res.data?.inquiry;
+        data.checkList = res.data?.checkList;
+
         data.workflowChart = res.data?.workflowChart;
         data.disease = res.data?.disease;
         data.workflowList = res.data?.workflowList;
@@ -313,7 +329,7 @@ const emitSuccess = (item) => {
     }
   } else {
     let theWorkFlowId = item.workflowId;
-    //flowh中存在循环的步骤
+    //flow中存在循环的步骤
     if (item.cycleChildId) {
       theWorkFlowId = item.cycleChildId;
     }
@@ -321,6 +337,22 @@ const emitSuccess = (item) => {
   }
   dealWidthCurWorkFlowObj();
   console.log("curWorkFlowObj.value.....", curWorkFlowObj.value);
+  setTimeout(() => {
+    if (
+      curWorkFlowObj.value?.moduleList &&
+      curWorkFlowObj.value?.moduleList.length
+    ) {
+      var tempItem = curWorkFlowObj.value?.moduleList.find(
+        (mItem) => mItem.moduleId != 1
+      );
+    }
+    console.log("tempItem.....", tempItem);
+
+    if (tempItem) {
+      active.value = tempItem?.moduleId;
+      console.log("active.value.....", active.value);
+    }
+  }, 50);
 
   let params = {
     diseaseId: query.value?.diseaseId,
@@ -405,6 +437,7 @@ const onReset = async () => {
     id: -100,
   });
   await initPage();
+  active.value = 2;
   setTimeout(() => {
     showSuccessToast({
       message: "训练已重置",

@@ -119,10 +119,10 @@ function mouseupHandler(e) {
   document.ontouchmove = null;
   document.ontouchend = null;
 }
-//五、定义一个滑块解锁成功的方法
+//五、定义一个滑块推进成功的方法
 function success() {
   isSuccess.value = true;
-  txt.value.innerHTML = "解锁成功";
+  txt.value.innerHTML = "推进成功";
   txt.value.style.left = "0px";
   txt.value.style.right = "26px";
 

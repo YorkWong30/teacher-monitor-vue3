@@ -313,7 +313,7 @@ defineExpose({
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 10px 10px 10px 10px;
+    padding: 2px 5px;
     box-sizing: border-box;
     position: relative;
     text-align: left;

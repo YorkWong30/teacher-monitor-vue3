@@ -17,7 +17,7 @@
       </div> -->
     </div>
   </div>
-  <div class="step-box x-c" v-else>训练结束，老师可开始复盘</div>
+  <div class="step-box x-c" v-else>流程已结束，老师可进行复盘</div>
 </template>
 <script setup>
 import { getCurrentInstance, ref, watch, defineProps, defineEmits } from "vue";
