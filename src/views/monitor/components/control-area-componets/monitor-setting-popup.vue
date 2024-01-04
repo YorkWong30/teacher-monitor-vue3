@@ -138,18 +138,18 @@ watch(
           sliderObj.value[key].value = parseInt(
             props.curCheckList.find((element) => {
               return element.item == key;
-            }).itemValue
+            })?.itemValue
           );
         }
         sliderObj.value.BP.value[0] = parseInt(
           props.curCheckList.find((element) => {
             return element.item == "DBP";
-          }).itemValue
+          })?.itemValue
         );
         sliderObj.value.BP.value[1] = parseInt(
           props.curCheckList.find((element) => {
             return element.item == "SBP";
-          }).itemValue
+          })?.itemValue
         );
       }
       console.log("sliderObj.value..", sliderObj.value);

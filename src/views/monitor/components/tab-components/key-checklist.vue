@@ -1,11 +1,35 @@
 <template>
-  <!-- <div class="top-box x-f bold">
-    <van-icon name="bullhorn-o" size="25" color="#ffd21e" />
-    满分5星，根据学员实际表现打分评价。
-  </div> -->
   <div class="key-checklist-box" v-if="checkList && checkList.length">
+    <div style="text-align: left" class="bold">学员关键行为评价说明：</div>
+    <div class="top-box x-bc bold">
+      <block class="x-bc" v-for="(i, index) in 5" :key="index">
+        <block class="y-ac">
+          <van-rate
+            :model-value="index + 1"
+            clearable
+            readonly
+            :size="14"
+            :count="index + 1"
+            color="#ffd21e"
+            void-icon="star"
+            void-color="#eee"
+          />
+          <span
+            class="bold"
+            style="
+              white-space: nowrap;
+              color: lightgray;
+              font-size: 12px;
+              height: 100%;
+              min-height: 20px;
+            "
+            >{{ rateList[i - 1] }}</span
+          >
+        </block>
+      </block>
+    </div>
     <div v-for="(i, index) in checkList" :key="i?.pointId">
-      <div class="x-bc bold" style="transition: all 2s">
+      <div class="x-bc bold">
         <div
           style="
             width: 70%;
@@ -28,14 +52,14 @@
           />
           <span
             class="bold"
-            v-show="i.value >= 1"
             style="
               white-space: nowrap;
               color: lightgray;
               font-size: 14px;
               height: 100%;
+              min-height: 20px;
             "
-            >{{ rateList[i.value - 1] }}</span
+            >{{ i.value >= 1 ? rateList[i.value - 1] : "" }}</span
           >
         </div>
       </div>
@@ -71,18 +95,17 @@ const rateList = ref(["非常差", "差", "一般", "好", "非常好"]);
 </script>
 <style lang="scss" scoped>
 .top-box {
-  height: 35px;
+  height: 55px;
   text-align: left;
-  padding: 25px 10px 15px 10px;
+  padding: 5px 10px 5px 10px;
   box-sizing: border-box;
   color: #ffd21e;
-  font-size: 20px;
 }
 .key-checklist-box {
   width: 100%;
   height: 100%;
   overflow-x: hidden;
-  padding: 25px 10px 15px 10px;
+  padding: 10px 10px 15px 10px;
   box-sizing: border-box;
   overflow-y: auto;
 }

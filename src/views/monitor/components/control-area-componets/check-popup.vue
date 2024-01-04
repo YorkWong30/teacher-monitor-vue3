@@ -13,7 +13,7 @@
         <van-grid
           :border="false"
           clickable
-          column-num="3"
+          column-num="4"
           class="grid-content"
           v-if="checkReport?.reportList?.length"
         >
@@ -21,14 +21,25 @@
             v-for="(item, index) in checkReport?.reportList"
             :key="item?.reportId"
           >
-            <van-image :src="item?.url" @click="onImage(item, index)">
+            <van-image
+              style="width: 100%; height: 100%"
+              fit="contain"
+              :src="item?.url"
+              @click="onImage(item, index)"
+            >
               <template v-slot:loading>
                 <van-loading type="spinner" size="20" />
               </template>
             </van-image>
             <div
-              style="height: 50px; width: 100%; font-size: 18px; color: #595959"
-              class="more-t x-c"
+              style="
+                height: 70px;
+                width: 100%;
+                font-size: 18px;
+                color: #595959;
+                line-height: 22px;
+              "
+              class="more-t"
             >
               {{ item?.reportName }}
             </div>
@@ -44,7 +55,7 @@
                 padding: 5px;
                 color: #fff;
                 width: 70px;
-                font-size: 17px;
+                font-size: 14px;
                 padding: 0;
               "
               >{{ item.isSend ? "已推送" : "推送" }}</van-button

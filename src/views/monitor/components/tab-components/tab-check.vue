@@ -20,21 +20,32 @@
     <van-grid
       :border="false"
       clickable
-      column-num="3"
+      column-num="4"
       v-if="propList?.reportList && propList.reportList.length"
     >
       <van-grid-item
         v-for="(item, index) in propList?.reportList"
         :key="item?.reportId"
       >
-        <van-image :src="item?.url" @click="onImage(item, index)">
+        <van-image
+          style="width: 100%; height: 100%"
+          fit="contain"
+          :src="item?.url"
+          @click="onImage(item, index)"
+        >
           <template v-slot:loading>
             <van-loading type="spinner" size="20" />
           </template>
         </van-image>
         <div
-          style="height: 50px; width: 100%; font-size: 18px; color: #595959"
-          class="more-t x-c"
+          style="
+            height: 70px;
+            width: 100%;
+            font-size: 18px;
+            color: #595959;
+            line-height: 22px;
+          "
+          class="more-t"
         >
           {{ item?.reportName }}
         </div>
