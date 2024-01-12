@@ -74,4 +74,14 @@ export function reset(data) {
   });
 }
 
-
+export function teacherPushReview(data) {
+  return request({
+    url: "/jhcloud-train/emergencyMedicine/teacherPushReview",
+    headers: {
+      isToken: true,
+      "content-type": "application/json",
+    },
+    method: "post",
+    data: data,
+  });
+}
