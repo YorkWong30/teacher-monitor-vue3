@@ -55,6 +55,45 @@
           title-inactive-color="#595959"
           title-active-color="#000000"
         >
+          <!-- 关键核查表 -->
+          <van-tab name="9999">
+            <template v-slot:title>
+              <div class="x-f" style="line-height: 20px">
+                <van-icon v-if="active == 9999" size="26" name="description" />
+
+                <div class="more-t">关键核查表</div>
+              </div>
+            </template>
+            <div class="common-tab">
+              <key-checklist :checkList="data.checkList"></key-checklist>
+            </div>
+          </van-tab>
+
+          <!-- 复盘资料 -->
+          <van-tab
+            name="8888"
+            v-if="
+              data.reviewList &&
+              data.reviewList.length &&
+              curWorkFlowObj?.childList &&
+              curWorkFlowObj?.childList.length == 0
+            "
+          >
+            <template v-slot:title>
+              <div class="x-f" style="line-height: 20px">
+                <van-icon v-if="active == 8888" size="26" name="description" />
+
+                <div class="more-t">复盘资料</div>
+              </div>
+            </template>
+            <div class="common-tab">
+              <review-list
+                :reviewList="data.reviewList"
+                @onSendReview="onSendReview"
+              ></review-list>
+            </div>
+          </van-tab>
+
           <block v-for="tab in curWorkFlowObj?.moduleList" :key="tab.moduleId">
             <van-tab v-if="tab?.moduleId !== 1" :name="tab.moduleId">
               <template v-slot:title>
@@ -86,37 +125,6 @@
               </div>
             </van-tab>
           </block>
-
-          <!-- 关键核查表 -->
-          <van-tab name="9999">
-            <template v-slot:title>
-              <div class="x-f" style="line-height: 20px">
-                <van-icon v-if="active == 9999" size="26" name="description" />
-
-                <div class="more-t">关键核查表</div>
-              </div>
-            </template>
-            <div class="common-tab">
-              <key-checklist :checkList="data.checkList"></key-checklist>
-            </div>
-          </van-tab>
-
-          <!-- 新的复盘 -->
-          <van-tab name="8888">
-            <template v-slot:title>
-              <div class="x-f" style="line-height: 20px">
-                <van-icon v-if="active == 8888" size="26" name="description" />
-
-                <div class="more-t">新的复盘</div>
-              </div>
-            </template>
-            <div class="common-tab">
-              <review-list
-                :reviewList="data.reviewList"
-                @onSendReview="onSendReview"
-              ></review-list>
-            </div>
-          </van-tab>
 
           <!-- <div
             v-if="
