@@ -38,14 +38,7 @@
       ></fixed-step>
 
       <!-- tab切换区 -->
-      <div
-        style="
-          background-color: #e4e9f3;
-          padding: 10px 0;
-
-          box-sizing: border-box;
-        "
-      >
+      <div style="" class="common-out-box">
         <van-tabs
           v-model:active="active"
           type="card"
@@ -64,7 +57,12 @@
                 <div class="more-t">关键核查表</div>
               </div>
             </template>
-            <div class="common-tab">
+            <div
+              class="common-tab"
+              :style="{
+                height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+              }"
+            >
               <key-checklist :checkList="data.checkList"></key-checklist>
             </div>
           </van-tab>
@@ -86,7 +84,12 @@
                 <div class="more-t">复盘资料</div>
               </div>
             </template>
-            <div class="common-tab">
+            <div
+              class="common-tab"
+              :style="{
+                height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+              }"
+            >
               <review-list
                 :reviewList="data.reviewList"
                 @onSendReview="onSendReview"
@@ -109,7 +112,13 @@
                   </div>
                 </div>
               </template>
-              <div style="" class="common-tab">
+              <div
+                style=""
+                class="common-tab"
+                :style="{
+                  height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+                }"
+              >
                 <inquiry
                   v-show="tab.style === 1"
                   :propList="tab"
@@ -199,7 +208,8 @@ const updateDetailMiniPopup = (data) => {
   showDetailMiniPopup.value = true;
 };
 
-const controlAreaRef = ref(null);
+const controlAreaRef = ref();
+
 //初始化弹出案例资料
 // setTimeout(() => {
 //   if (controlAreaRef.value) {
@@ -351,6 +361,7 @@ const dealWidthCurWorkFlowObj = () => {
 
 // 推进下一环节
 const emitSuccess = (item) => {
+  calcHeight();
   console.log("推进下一环节", item);
   if (item.childList.length) {
     // 跳过type == 2的检查项
@@ -510,9 +521,23 @@ const onSendReview = (obj) => {
       });
   });
 };
+const dtHeight = ref(210);
+const calcHeight = () => {
+  setTimeout(() => {
+    dtHeight.value = controlAreaRef.value.controlAreaRefInside.clientHeight;
+    console.log("dtHeight...", dtHeight.value);
+  }, 20);
+  // const elements = document.querySelectorAll(".common-tab");
+  // console.log("elements...", elements);
+
+  // elements.forEach((element) => {
+  //   element.style.height = `calc(100vh - ${dtHeight}px - 80px - 70px)`;
+  // });
+};
 onMounted(async () => {
   initPushedReports();
   await initPage();
+  calcHeight();
 });
 </script>
 <style lang="scss">
@@ -557,8 +582,13 @@ ol {
   overflow: hidden;
   position: relative;
 }
+.common-out-box {
+  background-color: #e4e9f3;
+  padding: 10px 0;
+  box-sizing: border-box;
+}
 .common-tab {
-  height: calc(100vh - 280px - 80px - 70px);
+  // height: calc(100vh - 280px - 80px - 70px);
   width: calc(100vw - 20px);
   margin: 0 auto;
   background-color: #ffffff;

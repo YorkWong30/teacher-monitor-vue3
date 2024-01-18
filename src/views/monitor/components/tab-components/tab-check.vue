@@ -125,7 +125,7 @@ const send = (item, index) => {
 }
 .check-box {
   width: 100%;
-  height: 100%;
+  max-height: 100%;
   overflow-x: hidden;
   padding: 15px 20px;
   box-sizing: border-box;

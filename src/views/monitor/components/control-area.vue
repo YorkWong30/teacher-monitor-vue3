@@ -1,5 +1,5 @@
 <template>
-  <div class="control-box">
+  <div class="control-box" ref="controlAreaRefInside">
     <van-row gutter="5">
       <!-- <van-col span="4">
         <div class="common-col head x-c">
@@ -67,25 +67,25 @@
     </van-row>
     <div class="title-box">
       <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>
+      <div
+        class="detail-button animate__animated animate__fadeInUp"
+        v-if="
+          examPointList &&
+          examPointList.length &&
+          examPointList[0]?.pointType === 2 &&
+          examPointList[0]?.point
+        "
+        @click="showDetailMini(examPointList[0]?.point)"
+      >
+        <van-icon
+          name="question-o"
+          color="#1987E1"
+          style="margin-right: 4px"
+        />详 情
+      </div>
     </div>
     <div class="second-box">
       <div class="list-box">
-        <div
-          class="detail-button"
-          v-if="
-            examPointList &&
-            examPointList.length &&
-            examPointList[0]?.pointType === 2 &&
-            examPointList[0]?.point
-          "
-          @click="showDetailMini(examPointList[0]?.point)"
-        >
-          <van-icon
-            name="question-o"
-            color="#1987E1"
-            style="margin-right: 6px"
-          />详 情
-        </div>
         <div
           v-if="examPointList && examPointList.length"
           class="list-item"
@@ -123,8 +123,8 @@
     ></monitor-setting-popup>
   </div>
 </template>
-<script setup>
-import { getCurrentInstance, ref, defineProps, watch, defineExpose } from "vue";
+<script setup name="controlArea">
+import { onMounted, ref, defineProps, defineExpose } from "vue";
 import flowPopup from "./control-area-componets/flow-popup.vue";
 import checkPopup from "./control-area-componets/check-popup.vue";
 import monitorSettingPopup from "./control-area-componets/monitor-setting-popup.vue";
@@ -132,6 +132,7 @@ import { imageUrl } from "@/utils/ruoyi";
 import { showConfirmDialog } from "vant";
 import { teacherPushMonitor } from "@/api/index";
 import { useRouter } from "vue-router";
+import "animate.css";
 const router = useRouter();
 const props = defineProps({
   curWorkFlowObj: {
@@ -225,15 +226,23 @@ const updateMonitor = (e) => {
   console.log("updateMonitor..", e);
   emits("updateMonitor", e);
 };
-
+const controlAreaRefInside = ref(null);
+onMounted(async () => {
+  console.log(
+    "controlAreaRefInside...",
+    controlAreaRefInside.value.clientHeight
+  );
+});
 defineExpose({
   doFlowShow,
+  controlAreaRefInside,
 });
 </script>
 <style lang="scss" scoped>
 .control-box {
   width: 100%;
-  height: 280px;
+  max-height: 280px;
+  min-height: 210px;
   padding: 20px;
   box-sizing: border-box;
   background-color: #235de6;
@@ -296,12 +305,27 @@ defineExpose({
     bottom: -5px;
     left: 45%;
   }
+  .detail-button {
+    position: absolute;
+    // width: 50px;
+    height: 22px;
+    padding: 0 4px;
+    box-sizing: border-box;
+    line-height: 22px;
+    background-color: #fff;
+    color: #1987e1;
+    font-size: 12px;
+    border-radius: 4px 4px 0 0;
+    right: 5px;
+    bottom: -16px;
+    z-index: 999;
+    text-align: center;
+  }
 }
 .second-box {
   width: 100%;
-  min-height: 108px;
-  height: 108px;
   max-height: 108px;
+  min-height: 38px;
   overflow: scroll;
   background-color: #ffffff;
   border-radius: 6px;
@@ -317,20 +341,7 @@ defineExpose({
     box-sizing: border-box;
     position: relative;
     text-align: left;
-    .detail-button {
-      position: absolute;
-      width: 70px;
-      height: 32px;
-      line-height: 32px;
-      background-color: #f3f6f9;
-      color: #1987e1;
-      font-size: 14px;
-      border-radius: 18px 0px 0px 18pt;
-      right: 0px;
-      bottom: 4%;
-      z-index: 999;
-      text-align: center;
-    }
+
     .list-item {
       width: 100%;
       height: 100%;
