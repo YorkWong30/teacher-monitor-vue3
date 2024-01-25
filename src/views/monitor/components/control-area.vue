@@ -67,22 +67,6 @@
     </van-row>
     <div class="title-box">
       <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>
-      <div
-        class="detail-button animate__animated animate__fadeInUp"
-        v-if="
-          examPointList &&
-          examPointList.length &&
-          examPointList[0]?.pointType === 2 &&
-          examPointList[0]?.point
-        "
-        @click="showDetailMini(examPointList[0]?.point)"
-      >
-        <van-icon
-          name="question-o"
-          color="#1987E1"
-          style="margin-right: 4px"
-        />详 情
-      </div>
     </div>
     <div class="second-box">
       <div class="list-box">
@@ -97,6 +81,24 @@
         ></div>
         <div v-else class="list-item">
           当前环节无考点，老师可根据实际情况进行考察。
+        </div>
+        <div
+          class="detail-button"
+          v-if="
+            examPointList &&
+            examPointList.length &&
+            examPointList[0]?.pointType === 2 &&
+            examPointList[0]?.point
+          "
+          @click="showDetailMini(examPointList[0]?.point)"
+        >
+          <div class="main-btn-ctn pre3D x-c animate__animated animate__fadeInUp">
+            <van-icon
+              name="question-o"
+              color="#1987E1"
+              style="margin-right: 4px"
+            />详 情
+          </div>
         </div>
       </div>
     </div>
@@ -305,22 +307,6 @@ defineExpose({
     bottom: -5px;
     left: 45%;
   }
-  .detail-button {
-    position: absolute;
-    // width: 50px;
-    height: 22px;
-    padding: 0 4px;
-    box-sizing: border-box;
-    line-height: 22px;
-    background-color: #fff;
-    color: #1987e1;
-    font-size: 12px;
-    border-radius: 4px 4px 0 0;
-    right: 5px;
-    bottom: -16px;
-    z-index: 999;
-    text-align: center;
-  }
 }
 .second-box {
   width: 100%;
@@ -337,7 +323,7 @@ defineExpose({
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 2px 5px;
+    padding: 5px 10px;
     box-sizing: border-box;
     position: relative;
     text-align: left;
@@ -348,6 +334,25 @@ defineExpose({
       overflow-x: hidden;
       box-sizing: border-box;
       overflow-y: auto;
+    }
+    .detail-button {
+      // position: absolute;
+      // width: 50px;
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+      z-index: 999;
+      .main-btn-ctn {
+        background-color: #f3f6f9;
+        height: 22px;
+        padding: 0 10px;
+        box-sizing: border-box;
+        line-height: 22px;
+        color: #1987e1;
+        font-size: 12px;
+        border-radius: 4px 4px 0 0;
+        border-radius: 18px;
+      }
     }
   }
 }
