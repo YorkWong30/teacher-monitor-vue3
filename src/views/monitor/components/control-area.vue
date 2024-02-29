@@ -92,7 +92,9 @@
           "
           @click="showDetailMini(examPointList[0]?.point)"
         >
-          <div class="main-btn-ctn pre3D x-c animate__animated animate__fadeInUp">
+          <div
+            class="main-btn-ctn pre3D x-c animate__animated animate__fadeInUp"
+          >
             <van-icon
               name="question-o"
               color="#1987E1"

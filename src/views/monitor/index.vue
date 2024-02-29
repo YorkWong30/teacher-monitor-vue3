@@ -130,6 +130,7 @@
                   :propList="tab"
                   v-show="tab.style === 2"
                   @onPush="onPush"
+                  @onApply="onApply"
                 ></tab-check>
               </div>
             </van-tab>
@@ -229,6 +230,7 @@ watch(
 );
 
 const PushedReports = ref([]); //已推送的报告
+const ApplyedReports = ref([]); //已申请的报告
 
 // 修改已推送的报告的状态
 const changeReportStatus = (arr) => {
@@ -238,6 +240,22 @@ const changeReportStatus = (arr) => {
         r.isSend = true;
       } else {
         r.isSend = false;
+      }
+    });
+    return arr;
+  } else {
+    return [];
+  }
+};
+
+// 修改已申请的报告的状态
+const changeReportStatusApply = (arr) => {
+  if (arr && arr.length) {
+    arr.forEach((r) => {
+      if (ApplyedReports.value.includes(r.reportId)) {
+        r.isApply = true;
+      } else {
+        r.isApply = false;
       }
     });
     return arr;
@@ -259,6 +277,7 @@ const data = reactive({
 //当前 workflow 对象
 const curWorkFlowObj = ref({});
 
+//初始化已推送的报告
 const initPushedReports = () => {
   PushedReports.value = localStorage.getItem(
     `${currentPersonId.value}-${query.value.diseaseId}`
@@ -272,6 +291,27 @@ const initPushedReports = () => {
   console.log("setup////PushedReports.value..", PushedReports.value);
   if (data.checkReport.reportList && data.checkReport.reportList.length) {
     data.checkReport.reportList = changeReportStatus(
+      data.checkReport.reportList
+    );
+  }
+
+  dealWidthCurWorkFlowObj();
+};
+
+//初始化已申请的报告
+const initApplyedReports = () => {
+  ApplyedReports.value = localStorage.getItem(
+    `${currentPersonId.value}-${query.value.diseaseId}-Apply`
+  )
+    ? JSON.parse(
+        localStorage.getItem(
+          `${currentPersonId.value}-${query.value.diseaseId}-Apply`
+        )
+      )
+    : [];
+  console.log("setup////ApplyedReports.value..", ApplyedReports.value);
+  if (data.checkReport.reportList && data.checkReport.reportList.length) {
+    data.checkReport.reportList = changeReportStatusApply(
       data.checkReport.reportList
     );
   }
@@ -302,6 +342,9 @@ const initPage = () => {
         data.disease = res.data?.disease;
         data.workflowList = res.data?.workflowList;
         data.checkReport.reportList = changeReportStatus(
+          res.data?.checkReport?.reportList
+        );
+        data.checkReport.reportList = changeReportStatusApply(
           res.data?.checkReport?.reportList
         );
 
@@ -354,6 +397,7 @@ const dealWidthCurWorkFlowObj = () => {
       //辅助检查的报告推送状态修改
       if (arr[index].moduleId === 4) {
         arr[index].reportList = changeReportStatus(arr[index].reportList);
+        arr[index].reportList = changeReportStatusApply(arr[index].reportList);
       }
     });
   }
@@ -431,6 +475,27 @@ const onPush = (item) => {
   });
 };
 
+const removeValue = (array, value) => {
+  return array.filter(function (item) {
+    return item !== value;
+  });
+};
+
+//申请报告单
+const onApply = ({ item, theType }) => {
+  console.log("item, theType,", item, theType);
+  if (theType) {
+    ApplyedReports.value.push(item.reportId);
+  } else {
+    ApplyedReports.value = removeValue(ApplyedReports.value, item.reportId);
+  }
+  localStorage.setItem(
+    `${currentPersonId.value}-${query.value.diseaseId}-Apply`,
+    JSON.stringify(ApplyedReports.value)
+  );
+  initApplyedReports();
+};
+
 //推送患者生命状态
 const setLifeState = (item) => {
   console.log("setLifeStateitem...", item);
@@ -458,6 +523,9 @@ const resetReoprt = () => {
         localStorage.removeItem(
           `${currentPersonId.value}-${query.value.diseaseId}`
         );
+        localStorage.removeItem(
+          `${currentPersonId.value}-${query.value.diseaseId}-Apply`
+        );
 
         resolve();
       })
@@ -476,6 +544,7 @@ const onReset = async () => {
   });
   await resetReoprt();
   initPushedReports();
+  initApplyedReports();
   await setLifeState({
     id: -100,
   });
@@ -536,6 +605,7 @@ const calcHeight = () => {
 };
 onMounted(async () => {
   initPushedReports();
+  initApplyedReports();
   await initPage();
   calcHeight();
 });
