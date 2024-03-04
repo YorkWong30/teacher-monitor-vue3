@@ -117,6 +117,7 @@
       :checkReport="checkReport"
       v-model:show="showCheckPopup"
       @onPushed="onPushed"
+      @onApplyed="onApplyed"
     ></check-popup>
 
     <!-- 心电监护仪参数控制板 -->
@@ -172,6 +173,7 @@ const showMonitorSettingPopup = ref(false); //心电监护仪参数控制板是�
 
 const emits = defineEmits([
   "onPush",
+  "onApply",
   "onReset",
   "updateMonitor",
   "updateDetailMiniPopup",
@@ -195,6 +197,10 @@ const doMonitorSettingShow = () => {
 
 const onPushed = (item) => {
   emits("onPush", item);
+};
+const onApplyed = ({ item, theType }) => {
+  console.log("bbb....", item, theType);
+  emits("onApply", { item, theType });
 };
 
 const showDetailMini = (data) => {

@@ -10,19 +10,52 @@
         <div class="title-box--flow van-hairline--bottom x-c bold">
           <div>检查报告单</div>
         </div>
+        <div style="background-color: #fff; padding: 7px 0">
+          <div class="apply-tip-box  x-c">请注意标记学员已申请的检查项目</div>
+        </div>
         <van-grid
-          :border="false"
+          :border="true"
           clickable
           column-num="4"
+          :gutter="2"
           class="grid-content"
           v-if="checkReport?.reportList?.length"
         >
           <van-grid-item
             v-for="(item, index) in checkReport?.reportList"
             :key="item?.reportId"
+            style="margin-bottom: 5px"
           >
+            <div
+              class="apply-div-v2 x-c"
+              v-if="!item.isApply"
+              @click.stop="apply(item, true)"
+            >
+              <div class="x-c">
+                <img
+                  style=""
+                  src="@/assets/images/check-no.png"
+                  mode="scaleToFill"
+                />
+                申请检查
+              </div>
+            </div>
+            <div
+              class="apply-div-v2 x-c apply-checked"
+              v-else
+              @click.stop="apply(item, false)"
+            >
+              <div class="x-c">
+                <img
+                  style=""
+                  src="@/assets/images/check-yes.png"
+                  mode="scaleToFill"
+                />
+                取消申请
+              </div>
+            </div>
             <van-image
-              style="width: 100%; height: 100%"
+              style="width: 100%; height: 100%; position: relative"
               fit="contain"
               :src="item?.url"
               @click="onImage(item, index)"
@@ -116,7 +149,7 @@ watch(
     deep: true,
   }
 );
-const emits = defineEmits(["update:show", "onPushed"]);
+const emits = defineEmits(["update:show", "onPushed", "onApplyed"]);
 
 const close = () => {
   emits("update:show", false);
@@ -137,8 +170,17 @@ const send = (item, index) => {
   item.isSend = true;
   emits("onPushed", item);
 };
+// 申请报告单
+const apply = (item, theType) => {
+  console.log("aaa....", item, theType);
+
+  emits("onApplyed", { item, theType });
+};
 </script>
 <style lang="scss" scoped>
+:deep(.van-grid-item__content) {
+  padding: 0 0 10px 0 !important;
+}
 .title-box--flow {
   font-size: 26px;
   height: 60px;
@@ -162,5 +204,34 @@ const send = (item, index) => {
   overflow-y: auto;
   background-color: #ffffff;
   width: 100%;
+}
+.apply-tip-box {
+  height: 40px;
+  padding: 5px 0;
+  margin: 0 10px;
+  box-sizing: border-box;
+  background-color: #fef5e7;
+  font-size: 14px;
+  color: #000;
+  border-radius: 4px;
+}
+.apply-div-v2 {
+  padding: 2px 0;
+  height: 35px;
+  width: 100%;
+  background-color: #f2f4f9;
+  font-size: 12px;
+  color: #0e0f0f;
+  img {
+    width: 22px;
+    height: 22px;
+  }
+}
+.apply-checked {
+  padding: 2px 0;
+
+  background-color: #5fc97a !important;
+  transition: all 2s;
+  color: #ffffff;
 }
 </style>

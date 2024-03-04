@@ -22,12 +22,13 @@
       :border="true"
       clickable
       column-num="4"
+      :gutter="2"
       v-if="propList?.reportList && propList.reportList.length"
     >
       <van-grid-item
-        class="the-grid-item"
         v-for="(item, index) in propList?.reportList"
         :key="item?.reportId"
+        style="margin-bottom: 5px"
       >
         <div
           class="apply-div-v2 x-c"
@@ -148,9 +149,6 @@ const apply = (item, theType) => {
 };
 </script>
 <style lang="scss" scoped>
-.the-grid-item {
-  padding: 0 0 10px 0 !important;
-}
 :deep(.van-grid-item__content) {
   padding: 0 0 10px 0 !important;
 }

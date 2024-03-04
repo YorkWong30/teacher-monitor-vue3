@@ -22,6 +22,7 @@
         :disease="data.disease"
         :checkReport="data.checkReport"
         @onPush="onPush"
+        @onApply="onApply"
         @onReset="onReset"
         @updateMonitor="updateMonitor"
         @updateDetailMiniPopup="updateDetailMiniPopup"
