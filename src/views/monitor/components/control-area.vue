@@ -61,7 +61,7 @@
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="change">
           <div class="white f14">切换案例</div>
-          <!-- <img :src="imageUrl('reset.png')" mode="scaleToFill" />-->
+          <img :src="imageUrl('shift.png')" mode="scaleToFill" />
         </div></van-col
       >
     </van-row>
