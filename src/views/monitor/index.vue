@@ -1,9 +1,6 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
-    <div
-      class="monitor-box"
-      v-if="data.workflowList && data.workflowList.length"
-    >
+    <div class="monitor-box" v-if="data.workflowList && data.workflowList.length">
       <van-image-preview v-model:show="show"> </van-image-preview>
       <!-- <van-nav-bar
         title="医学模拟"
@@ -13,42 +10,19 @@
         placeholder
       /> -->
       <!-- 顶部控制区 -->
-      <control-area
-        ref="controlAreaRef"
-        :curWorkFlowObj="curWorkFlowObj"
-        :currentPersonId="currentPersonId"
-        :examPointList="examPointList"
-        :workflowChart="data.workflowChart"
-        :disease="data.disease"
-        :checkReport="data.checkReport"
-        @onPush="onPush"
-        @onApply="onApply"
-        @onReset="onReset"
-        @updateMonitor="updateMonitor"
-        @updateDetailMiniPopup="updateDetailMiniPopup"
-      ></control-area>
+      <control-area ref="controlAreaRef" :curWorkFlowObj="curWorkFlowObj" :currentPersonId="currentPersonId"
+        :examPointList="examPointList" :workflowChart="data.workflowChart" :disease="data.disease"
+        :checkReport="data.checkReport" @onPush="onPush" @onApply="onApply" @onReset="onReset"
+        @updateMonitor="updateMonitor" @updateDetailMiniPopup="updateDetailMiniPopup"></control-area>
 
-      <detail-popup
-        v-model:show="showDetailMiniPopup"
-        :data="showDetailMiniPopup_data"
-      ></detail-popup>
+      <detail-popup v-model:show="showDetailMiniPopup" :data="showDetailMiniPopup_data"></detail-popup>
 
-      <fixed-step
-        :renderList="curWorkFlowObj?.childList"
-        @emitSuccess="emitSuccess"
-      ></fixed-step>
+      <fixed-step :renderList="curWorkFlowObj?.childList" @emitSuccess="emitSuccess"></fixed-step>
 
       <!-- tab切换区 -->
       <div style="" class="common-out-box">
-        <van-tabs
-          v-model:active="active"
-          type="card"
-          swipe-threshold="3"
-          background="#f2f4fa"
-          color="#ffffff"
-          title-inactive-color="#595959"
-          title-active-color="#000000"
-        >
+        <van-tabs v-model:active="active" type="card" swipe-threshold="3" background="#f2f4fa" color="#ffffff"
+          title-inactive-color="#595959" title-active-color="#000000">
           <!-- 关键核查表 -->
           <van-tab name="9999">
             <template v-slot:title>
@@ -58,26 +32,20 @@
                 <div class="more-t">关键核查表</div>
               </div>
             </template>
-            <div
-              class="common-tab"
-              :style="{
-                height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
-              }"
-            >
+            <div class="common-tab" :style="{
+              height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+            }">
               <key-checklist :checkList="data.checkList"></key-checklist>
             </div>
           </van-tab>
 
           <!-- 复盘资料 -->
-          <van-tab
-            name="8888"
-            v-if="
-              data.reviewList &&
-              data.reviewList.length &&
-              curWorkFlowObj?.childList &&
-              curWorkFlowObj?.childList.length == 0
-            "
-          >
+          <van-tab name="8888" v-if="
+            data.reviewList &&
+            data.reviewList.length &&
+            curWorkFlowObj?.childList &&
+            curWorkFlowObj?.childList.length == 0
+          ">
             <template v-slot:title>
               <div class="x-f" style="line-height: 20px">
                 <van-icon v-if="active == 8888" size="26" name="description" />
@@ -85,16 +53,27 @@
                 <div class="more-t">复盘资料</div>
               </div>
             </template>
-            <div
-              class="common-tab"
-              :style="{
-                height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
-              }"
-            >
-              <review-list
-                :reviewList="data.reviewList"
-                @onSendReview="onSendReview"
-              ></review-list>
+            <div class="common-tab" :style="{
+              height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+            }">
+              <review-list :reviewList="data.reviewList" @onSendReview="onSendReview"></review-list>
+            </div>
+          </van-tab>
+
+          <!-- 评价表 -->
+          <van-tab name="7777" v-if="1">
+
+            <template v-slot:title>
+              <div class="x-f" style="line-height: 20px">
+                <van-icon v-if="active == 8888" size="26" name="description" />
+                <div class="more-t">评价表</div>
+              </div>
+            </template>
+            <div class="common-tab" :style="{
+              height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+              overflow: 'auto',
+            }">
+              <evaluate-list></evaluate-list>
             </div>
           </van-tab>
 
@@ -102,37 +81,21 @@
             <van-tab v-if="tab?.moduleId !== 1" :name="tab.moduleId">
               <template v-slot:title>
                 <div class="x-f" style="line-height: 20px">
-                  <img
-                    v-if="active == tab.moduleId && tab.icon"
-                    style="width: 32px; height: 32px"
-                    :src="imageUrl(tab.icon)"
-                    mode="scaleToFill"
-                  />
+                  <img v-if="active == tab.moduleId && tab.icon" style="width: 32px; height: 32px"
+                    :src="imageUrl(tab.icon)" mode="scaleToFill" />
                   <div class="more-t">
                     {{ tab.moduleName }}
                   </div>
                 </div>
               </template>
-              <div
-                style=""
-                class="common-tab"
-                :style="{
-                  height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
-                }"
-              >
-                <inquiry
-                  v-show="tab.style === 1"
-                  :propList="tab"
-                  @updateDetailMiniPopup="updateDetailMiniPopup"
-                ></inquiry>
+              <div style="" class="common-tab" :style="{
+                height: `calc(100vh - ${dtHeight}px - 80px - 70px)`,
+              }">
+                <inquiry v-show="tab.style === 1" :propList="tab" @updateDetailMiniPopup="updateDetailMiniPopup">
+                </inquiry>
 
                 <!-- 辅助检查 -->
-                <tab-check
-                  :propList="tab"
-                  v-show="tab.style === 2"
-                  @onPush="onPush"
-                  @onApply="onApply"
-                ></tab-check>
+                <tab-check :propList="tab" v-show="tab.style === 2" @onPush="onPush" @onApply="onApply"></tab-check>
               </div>
             </van-tab>
           </block>
@@ -162,7 +125,7 @@ import { useRoute, useRouter } from "vue-router";
 import controlArea from "./components/control-area";
 import detailPopup from "./components/detail-popup.vue";
 import fixedStep from "./components/fixed-step";
-
+import evaluateList from "./components/tab-components/evaluate-list.vue";
 import keyChecklist from "./components/tab-components/key-checklist.vue";
 import reviewList from "./components/tab-components/review-list.vue";
 import inquiry from "./components/tab-components/inquiry";
@@ -284,10 +247,10 @@ const initPushedReports = () => {
     `${currentPersonId.value}-${query.value.diseaseId}`
   )
     ? JSON.parse(
-        localStorage.getItem(
-          `${currentPersonId.value}-${query.value.diseaseId}`
-        )
+      localStorage.getItem(
+        `${currentPersonId.value}-${query.value.diseaseId}`
       )
+    )
     : [];
   console.log("setup////PushedReports.value..", PushedReports.value);
   if (data.checkReport.reportList && data.checkReport.reportList.length) {
@@ -305,10 +268,10 @@ const initApplyedReports = () => {
     `${currentPersonId.value}-${query.value.diseaseId}-Apply`
   )
     ? JSON.parse(
-        localStorage.getItem(
-          `${currentPersonId.value}-${query.value.diseaseId}-Apply`
-        )
+      localStorage.getItem(
+        `${currentPersonId.value}-${query.value.diseaseId}-Apply`
       )
+    )
     : [];
   console.log("setup////ApplyedReports.value..", ApplyedReports.value);
   if (data.checkReport.reportList && data.checkReport.reportList.length) {
@@ -461,6 +424,7 @@ const onPush = (item) => {
     diseaseId: query.value?.diseaseId,
     checkId: item.checkId,
     personId: currentPersonId.value,
+    ONLY_SINGLE: true
   };
   teacherPushReport(params).then((res) => {
     PushedReports.value.push(item.reportId);
@@ -572,7 +536,7 @@ const updateMonitor = (e) => {
     personId: currentPersonId.value,
     monitorData: e,
   };
-  teacherPushMonitor(params).then((res) => {});
+  teacherPushMonitor(params).then((res) => { });
 };
 
 //推送复盘内容
@@ -616,30 +580,38 @@ ul,
 ul li {
   list-style-type: inherit;
 }
+
 ol {
   list-style-type: decimal;
 }
+
 ol li {
   list-style-type: inherit;
 }
+
 ul,
 ol {
   padding-left: 20px;
 }
+
 :root:root {
   --van-toast-text-color: #000;
 }
+
 .van-tab__text {
   color: #000;
   font-size: 16px;
 }
+
 .van-tabs__nav--card {
   border: none;
   border-radius: 6px 6px 0 0;
 }
+
 .van-tab--card {
   border-radius: 6px 6px 0 0;
 }
+
 // .van-tabs__wrap {
 //   // display: flex;
 // }
@@ -647,17 +619,20 @@ ol {
   // color: #ffffff;
   font-size: 22px;
 }
+
 .monitor-box {
   width: 100%;
   height: 100%;
   overflow: hidden;
   position: relative;
 }
+
 .common-out-box {
   background-color: #e4e9f3;
   padding: 10px 0;
   box-sizing: border-box;
 }
+
 .common-tab {
   // height: calc(100vh - 280px - 80px - 70px);
   width: calc(100vw - 20px);
@@ -665,6 +640,7 @@ ol {
   background-color: #ffffff;
   border-radius: 0 0 6px 6px;
 }
+
 .van-tabs__nav--card {
   margin: 0 10px;
 }

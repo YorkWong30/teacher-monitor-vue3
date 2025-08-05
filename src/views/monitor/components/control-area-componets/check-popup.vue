@@ -1,11 +1,6 @@
 <template>
   <van-config-provider :theme-vars="themeVars">
-    <van-popup
-      :show="show"
-      :close-on-click-overlay="false"
-      @close="close"
-      style="background-color: transparent"
-    >
+    <van-popup :show="show" :close-on-click-overlay="false" @close="close" style="background-color: transparent">
       <div class="check-box">
         <div class="title-box--flow van-hairline--bottom x-c bold">
           <div>检查报告单</div>
@@ -13,86 +8,48 @@
         <div style="background-color: #fff; padding: 7px 0">
           <div class="apply-tip-box  x-c">请注意标记学员已申请的检查项目</div>
         </div>
-        <van-grid
-          :border="true"
-          clickable
-          column-num="4"
-          :gutter="2"
-          class="grid-content"
-          v-if="checkReport?.reportList?.length"
-        >
-          <van-grid-item
-            v-for="(item, index) in checkReport?.reportList"
-            :key="item?.reportId"
-            style="margin-bottom: 5px"
-          >
-            <div
-              class="apply-div-v2 x-c"
-              v-if="!item.isApply"
-              @click.stop="apply(item, true)"
-            >
+        <van-grid :border="true" clickable column-num="4" :gutter="2" class="grid-content"
+          v-if="checkReport?.reportList?.length">
+          <van-grid-item v-for="(item, index) in checkReport?.reportList" :key="item?.reportId"
+            style="margin-bottom: 5px">
+            <div class="apply-div-v2 x-c" v-if="!item.isApply" @click.stop="apply(item, true)">
               <div class="x-c">
-                <img
-                  style=""
-                  src="@/assets/images/check-no.png"
-                  mode="scaleToFill"
-                />
+                <img style="" src="@/assets/images/check-no.png" mode="scaleToFill" />
                 申请检查
               </div>
             </div>
-            <div
-              class="apply-div-v2 x-c apply-checked"
-              v-else
-              @click.stop="apply(item, false)"
-            >
+            <div class="apply-div-v2 x-c apply-checked" v-else @click.stop="apply(item, false)">
               <div class="x-c">
-                <img
-                  style=""
-                  src="@/assets/images/check-yes.png"
-                  mode="scaleToFill"
-                />
+                <img style="" src="@/assets/images/check-yes.png" mode="scaleToFill" />
                 取消申请
               </div>
             </div>
-            <van-image
-              style="width: 100%; height: 100%; position: relative"
-              fit="contain"
-              :src="item?.url"
-              @click="onImage(item, index)"
-            >
+            <van-image style="width: 100%; height: 100%; position: relative" fit="contain" :src="item?.url"
+              @click="onImage(item, index)">
               <template v-slot:loading>
                 <van-loading type="spinner" size="20" />
               </template>
             </van-image>
-            <div
-              style="
+            <div style="
                 height: 70px;
                 width: 100%;
                 font-size: 18px;
                 color: #595959;
                 line-height: 22px;
-              "
-              class="more-t"
-            >
+              " class="more-t">
               {{ item?.reportName }}
             </div>
-            <van-button
-              size="mini"
-              round
-              type="default"
-              color="#235de6"
-              :disabled="item.isSend"
-              @click="send(item, index)"
-              style="
+            <van-button size="mini" round type="default" color="#235de6" 
+              @click="send(item, index)" style="
                 height: 32px;
                 padding: 5px;
                 color: #fff;
                 width: 70px;
                 font-size: 14px;
                 padding: 0;
-              "
-              >{{ item.isSend ? "已推送" : "推送" }}</van-button
-            >
+              ">
+              {{ item.isSend ? "再次推送" : "推送" }}
+            </van-button>
           </van-grid-item>
         </van-grid>
         <div class="grid-content" v-else>
@@ -124,7 +81,7 @@ const themeVars = reactive({
 const props = defineProps({
   checkReport: {
     type: Object,
-    default: () => {},
+    default: () => { },
   },
   show: {
     type: Boolean,
@@ -181,16 +138,19 @@ const apply = (item, theType) => {
 :deep(.van-grid-item__content) {
   padding: 0 0 10px 0 !important;
 }
+
 .title-box--flow {
   font-size: 26px;
   height: 60px;
   background-color: #ffffff;
 }
+
 .check-box {
   width: 100%;
   border-radius: 6px;
   overflow-x: hidden;
 }
+
 .footer-box {
   width: 100%;
   height: 70px;
@@ -205,6 +165,7 @@ const apply = (item, theType) => {
   background-color: #ffffff;
   width: 100%;
 }
+
 .apply-tip-box {
   height: 40px;
   padding: 5px 0;
@@ -215,6 +176,7 @@ const apply = (item, theType) => {
   color: #000;
   border-radius: 4px;
 }
+
 .apply-div-v2 {
   padding: 2px 0;
   height: 35px;
@@ -222,11 +184,13 @@ const apply = (item, theType) => {
   background-color: #f2f4f9;
   font-size: 12px;
   color: #0e0f0f;
+
   img {
     width: 22px;
     height: 22px;
   }
 }
+
 .apply-checked {
   padding: 2px 0;
 
