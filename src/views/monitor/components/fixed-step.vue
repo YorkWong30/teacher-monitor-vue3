@@ -48,17 +48,19 @@ const onSuccess = (e) => {
 </script>
 <style lang="scss">
 .step-box {
-  //padding: 20px;
+  padding: 10px;
+  box-sizing: border-box;
   background-color: #235de6;
   color: #ffffff;
   box-sizing: border-box;
   width: 100%;
-  height: 80px;
+  height: 60px;
 }
 .slider-con {
   box-sizing: border-box;
   flex: 1;
   max-width: 260px;
+  transform: scale(0.8);
   .des {
     width: inherit;
     height: 40px;

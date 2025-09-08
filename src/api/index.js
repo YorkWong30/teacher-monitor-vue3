@@ -85,3 +85,16 @@ export function teacherPushReview(data) {
     data: data,
   });
 }
+
+// 复盘接口：POST /jhcloud-train/emergencyMedicine/review
+export function review(data) {
+  return request({
+    url: "/jhcloud-train/emergencyMedicine/review",
+    headers: {
+      isToken: true,
+      "content-type": "application/json",
+    },
+    method: "post",
+    data: data,
+  });
+}

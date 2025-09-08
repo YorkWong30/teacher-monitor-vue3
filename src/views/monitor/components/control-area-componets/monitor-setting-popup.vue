@@ -88,8 +88,8 @@ const sliderObj = ref({
     typeTitle: "收缩压,舒张压",
     color: "#FF0A08",
     value: [20, 80],
-    min: 0,
-    max: 140,
+    min: 40,
+    max: 220,
     isRange: true,
   },
   SpO2: {

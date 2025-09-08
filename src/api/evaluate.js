@@ -25,3 +25,15 @@ export function teacherPushEvaluation(data) {
         data: data,
     });
 }
+
+export function aiGlassesHint(data) {
+    return request({
+        url: "/jhcloud-train/AiChat/aiGlassesHint",
+        headers: {
+            isToken: true,
+            "content-type": "application/json",
+        },
+        method: "post",
+        data: data,
+    });
+}

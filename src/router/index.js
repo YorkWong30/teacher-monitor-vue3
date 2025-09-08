@@ -17,6 +17,10 @@ const routes = [
     path: "/monitor",
     component: () => import("@/views/monitor/index"),
   },
+  {
+    path: "/addNewCase",
+    component: () => import("@/views/addNewCase"),
+  },
 ];
 
 const router = createRouter({

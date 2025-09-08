@@ -25,20 +25,13 @@
                 inactive-color="#000000"
                 size="15px"
               /> -->
-              <van-button
-                @click="doMonitorSettingShow"
-                size="small"
-                plain
-                type="default"
-                :disabled="!monitorIsOpen"
+              <van-button @click="doMonitorSettingShow" size="small" plain type="default" :disabled="!monitorIsOpen"
                 style="
                   height: 26px;
                   font-size: 20px;
                   color: #000;
                   background: #fff;
-                "
-                >设置</van-button
-              >
+                ">设置</van-button>
             </div>
           </div>
         </div>
@@ -46,86 +39,72 @@
       <van-col span="4" @click="doFlowShow">
         <div class="common-col common-control flow y-bc">
           <div class="white f14">案例资料</div>
-          <img :src="imageUrl('flow.png')" mode="scaleToFill" /></div
-      ></van-col>
+          <img :src="imageUrl('flow.png')" mode="scaleToFill" />
+        </div>
+      </van-col>
       <van-col span="4" @click="doCheckShow">
         <div class="common-col common-control flow y-bc">
           <div class="white f14">所有检查</div>
-          <img :src="imageUrl('assist.png')" mode="scaleToFill" /></div
-      ></van-col>
+          <img :src="imageUrl('assist.png')" mode="scaleToFill" />
+        </div>
+      </van-col>
+
+      <!-- <van-col span="4" @click="doEvaluationTip">
+        <div class="common-col common-control flow y-bc">
+          <div class="white f14">提醒学员</div>
+          <img :src="imageUrl('assist.png')" mode="scaleToFill" />
+        </div>
+      </van-col> -->
+
+
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="reset">
-          <div class="white f14">重置训练</div>
-          <img :src="imageUrl('reset.png')" mode="scaleToFill" /></div
-      ></van-col>
+          <div class="white f14">重置</div>
+          <img :src="imageUrl('reset.png')" mode="scaleToFill" />
+        </div>
+      </van-col>
       <van-col span="4">
         <div class="common-col common-control flow y-bc" @click="change">
           <div class="white f14">切换案例</div>
           <img :src="imageUrl('shift.png')" mode="scaleToFill" />
-        </div></van-col
-      >
+        </div>
+      </van-col>
     </van-row>
     <div class="title-box">
       <span class="one-t"> {{ curWorkFlowObj?.workflowName }}</span>
     </div>
     <div class="second-box">
       <div class="list-box">
-        <div
-          v-if="examPointList && examPointList.length"
-          class="list-item"
-          v-html="
-            examPointList[0]?.pointType === 1
-              ? examPointList[0]?.point
-              : examPointList[0]?.pointMini
-          "
-        ></div>
+        <div v-if="examPointList && examPointList.length" class="list-item" v-html="examPointList[0]?.pointType === 1
+          ? examPointList[0]?.point
+          : examPointList[0]?.pointMini
+          "></div>
         <div v-else class="list-item">
           当前环节无考点，老师可根据实际情况进行考察。
         </div>
-        <div
-          class="detail-button"
-          v-if="
-            examPointList &&
-            examPointList.length &&
-            examPointList[0]?.pointType === 2 &&
-            examPointList[0]?.point
-          "
-          @click="showDetailMini(examPointList[0]?.point)"
-        >
-          <div
-            class="main-btn-ctn pre3D x-c animate__animated animate__fadeInUp"
-          >
-            <van-icon
-              name="question-o"
-              color="#1987E1"
-              style="margin-right: 4px"
-            />详 情
+        <div class="detail-button" v-if="
+          examPointList &&
+          examPointList.length &&
+          examPointList[0]?.pointType === 2 &&
+          examPointList[0]?.point
+        " @click="showDetailMini(examPointList[0]?.point)">
+          <div class="main-btn-ctn pre3D x-c animate__animated animate__fadeInUp">
+            <van-icon name="question-o" color="#1987E1" style="margin-right: 4px" />详 情
           </div>
         </div>
       </div>
     </div>
 
     <!--案例流程弹框 -->
-    <flow-popup
-      v-model:show="showFlowPopup"
-      :workflowChart="workflowChart"
-      :disease="disease"
-    ></flow-popup>
+    <flow-popup v-model:show="showFlowPopup" :workflowChart="workflowChart" :disease="disease"></flow-popup>
 
     <!-- 辅助检查弹框 -->
-    <check-popup
-      :checkReport="checkReport"
-      v-model:show="showCheckPopup"
-      @onPushed="onPushed"
-      @onApplyed="onApplyed"
-    ></check-popup>
+    <check-popup :checkReport="checkReport" v-model:show="showCheckPopup" @onPushed="onPushed"
+      @onApplyed="onApplyed"></check-popup>
 
     <!-- 心电监护仪参数控制板 -->
-    <monitor-setting-popup
-      v-model:show="showMonitorSettingPopup"
-      :curCheckList="curWorkFlowObj.checkList"
-      @updateMonitor="updateMonitor"
-    ></monitor-setting-popup>
+    <monitor-setting-popup v-model:show="showMonitorSettingPopup" :curCheckList="curWorkFlowObj.checkList"
+      @updateMonitor="updateMonitor"></monitor-setting-popup>
   </div>
 </template>
 <script setup name="controlArea">
@@ -191,6 +170,11 @@ const doCheckShow = () => {
   showCheckPopup.value = true;
 };
 
+
+const doEvaluationTip  = () => {
+  emits("doEvaluationTip", {});
+};
+            
 const doMonitorSettingShow = () => {
   showMonitorSettingPopup.value = true;
 };
@@ -229,7 +213,7 @@ const change = () => {
     .then(() => {
       router.go(-1);
     })
-    .catch(() => {});
+    .catch(() => { });
 };
 
 const updateMonitor = (e) => {
@@ -251,12 +235,13 @@ defineExpose({
 <style lang="scss" scoped>
 .control-box {
   width: 100%;
-  max-height: 280px;
-  min-height: 210px;
-  padding: 20px;
+  max-height: 260px;
+  min-height: 190px;
+  padding: 20px 20px 6px 20px;
   box-sizing: border-box;
   background-color: #235de6;
 }
+
 .common-col {
   height: 80px;
   width: 100%;
@@ -268,14 +253,17 @@ defineExpose({
     height: 53px;
     border-radius: 24px;
   }
+
   .id {
     font-size: 14px;
   }
 }
+
 .monitor {
   color: #fff;
   background-color: rgba($color: #000000, $alpha: 0.35);
   border-radius: 8px;
+
   img {
     width: 75px;
     height: 65px;
@@ -289,11 +277,13 @@ defineExpose({
   box-sizing: border-box;
   padding: 10px 0 8px 0;
   margin: 0 auto;
+
   img {
     width: 50px;
     height: 36px;
   }
 }
+
 .title-box {
   margin: 15px 0 15px 0;
   box-sizing: border-box;
@@ -305,6 +295,7 @@ defineExpose({
   color: #fff;
   font-weight: bold;
   position: relative;
+
   &::after {
     position: absolute;
     content: "";
@@ -316,9 +307,10 @@ defineExpose({
     left: 45%;
   }
 }
+
 .second-box {
   width: 100%;
-  max-height: 108px;
+  max-height: 88px;
   min-height: 38px;
   overflow: scroll;
   background-color: #ffffff;
@@ -331,7 +323,7 @@ defineExpose({
     width: 100%;
     height: 100%;
     overflow: hidden;
-    padding: 5px 10px;
+    padding: 0px 10px;
     box-sizing: border-box;
     position: relative;
     text-align: left;
@@ -343,13 +335,17 @@ defineExpose({
       box-sizing: border-box;
       overflow-y: auto;
     }
+
     .detail-button {
       // position: absolute;
       // width: 50px;
       display: flex;
+      display: none;
+
       flex-direction: row-reverse;
       align-items: center;
       z-index: 999;
+
       .main-btn-ctn {
         background-color: #f3f6f9;
         height: 22px;

@@ -18,7 +18,8 @@ axios.defaults.headers["Content-Type"] = "application/json;charset=utf-8";
 const service = axios.create({
   // axios中请求配置有baseURL选项，表示请求URL公共部分
   baseURL: "http://8.130.18.64:8083",
-  // baseURL: "http://192.168.2.195:8083",
+  // baseURL: "http://192.168.2.20:8083",
+  //  baseURL: "http://192.168.2.150:8083",
 
   // 超时
   timeout: 10000,
@@ -58,7 +59,7 @@ service.interceptors.request.use(
       if (requestSize >= limitSize) {
         console.warn(
           `[${config.url}]: ` +
-            "请求数据大小超出允许的5M限制，无法进行防重复提交验证。"
+          "请求数据大小超出允许的5M限制，无法进行防重复提交验证。"
         );
         return config;
       }
@@ -110,7 +111,7 @@ service.interceptors.response.use(
     ) {
       return res.data;
     }
-    if (code === 101 || code === 111 || code == 1007) {
+    if (code === 101 || code === 111) {
       console.log("isRelogin..", isRelogin);
       if (1) {
         isRelogin.show = true;

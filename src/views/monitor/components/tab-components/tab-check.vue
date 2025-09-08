@@ -87,17 +87,17 @@
           round
           type="default"
           color="#235de6"
-          :disabled="item.isSend"
           @click="send(item)"
           style="
             height: 32px;
             padding: 8px;
             color: #fff;
             width: 70px;
-            font-size: 18px;
+            font-size: 14px;
+            white-space: nowrap;
             padding: 0;
           "
-          >{{ item.isSend ? "已推送" : "推送" }}
+          >{{ item.isSend ? "再次推送" : "推送" }}
         </van-button>
       </van-grid-item>
     </van-grid>
@@ -163,7 +163,7 @@ const apply = (item, theType) => {
   width: 100%;
   max-height: 100%;
   overflow-x: hidden;
-  padding: 15px 20px;
+  padding: 8px 10px;
   box-sizing: border-box;
   overflow-y: auto;
 }
