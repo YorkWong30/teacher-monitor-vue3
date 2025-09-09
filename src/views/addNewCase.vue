@@ -358,9 +358,9 @@ const showAiDialog = async (text) => {
       setTimeout(() => {
         addMessage("患者数据生成中", true);
         aiMessages.value[1].loading = false;
-      }, 6000);
+      }, 14000);
 
-    }, 6000);
+    }, 10000);
 
     console.log('立即调用AI接口');
 
