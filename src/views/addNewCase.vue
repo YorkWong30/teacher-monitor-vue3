@@ -214,7 +214,8 @@ const formTreatment = ref({
 const submitting = ref(false);
 
 // AI相关方法
-const showAiDialog = async () => {
+const showAiDialog = async (text) => {
+  console.log("showAiDialog....", text);
   // 校验
   if (!formBackground.value.caseName) {
     showToast({
@@ -353,22 +354,20 @@ const showAiDialog = async () => {
     setTimeout(() => {
       addMessage("病例生成中", true);
       aiMessages.value[0].loading = false;
-    }, 1500);
 
+      setTimeout(() => {
+        addMessage("患者数据生成中", true);
+        aiMessages.value[1].loading = false;
+      }, 6000);
 
+    }, 6000);
+
+    console.log('立即调用AI接口');
 
     // 立即调用AI接口
     const response = await getAiAnswer(formBackground.value.caseName);
 
 
-    addMessage("患者数据生成中", true);
-    aiMessages.value[1].loading = false;
-
-    // 立即显示完成状态
-    setTimeout(() => {
-      addMessage("AI生成完成！", false);
-      aiMessages.value[2].loading = false;
-    }, 500);
 
     // 处理AI响应
     if (response && response.data) {
@@ -381,10 +380,15 @@ const showAiDialog = async () => {
           aiData = JSON.parse(response.data.data.answer);
           console.log('aiData', aiData);
 
+
         } else {
           aiData = response.data;
         }
-
+        // 立即显示完成状态
+        setTimeout(() => {
+          addMessage("AI生成完成！", false);
+          aiMessages.value[2].loading = false;
+        }, 500);
         processAiResponse(aiData);
 
         //复位
@@ -399,45 +403,41 @@ const showAiDialog = async () => {
 
       } catch (parseError) {
         console.error('解析AI响应失败:', parseError);
-        // addMessage("AI生成完成，但数据格式有误", false);
-
         // 显示错误提示
         showFailToast({
-          message: '网络错误，请重试',
+          message: '网络错误，重试中...',
           duration: 1800
         });
 
         // 3秒后关闭弹窗
         setTimeout(() => {
           showAi.value = false;
+        }, 1000);
+
+        // 3秒后关闭弹窗
+        setTimeout(() => {
+          showAiDialog('重试中')
         }, 1800);
       }
-    } else {
-
-      // 显示错误提示
-      showFailToast({
-        message: '网络错误，请重试',
-        duration: 1800
-      });
-
-      setTimeout(() => {
-        showAi.value = false;
-      }, 2000);
     }
-
   } catch (error) {
-    console.error('AI处理失败:', error);
-    addMessage("AI处理失败，请重试", false);
-
+    console.error('error:', error);
     // 显示错误提示
     showFailToast({
       message: 'AI处理失败，请检查网络连接后重试',
       duration: 1800
     });
 
+
+    // 3秒后关闭弹窗
     setTimeout(() => {
       showAi.value = false;
-    }, 2000);
+    }, 1000);
+
+    // 3秒后关闭弹窗
+    setTimeout(() => {
+      showAiDialog('catch重试中')
+    }, 1800);
   }
 };
 
