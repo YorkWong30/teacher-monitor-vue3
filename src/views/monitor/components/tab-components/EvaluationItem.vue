@@ -7,15 +7,15 @@
                     {{ item.category }}
                 </span>
                 <button class="horn-btn horn-btn--f" title="F=提醒学员自己思考"
-                    @click="$emit('hint', { secret: 'F', scope: 'group', item })">提醒医生自己思考</button>
+                    @click="$emit('hint', { secret: 'F', scope: 'group', item }, item.category)">提醒医生自己思考</button>
                 <button class="horn-btn horn-btn--a" title="A=回报正确答案"
-                    @click="$emit('hint', { secret: 'A', scope: 'group', item })">向学员解答</button>
+                    @click="$emit('hint', { secret: 'A', scope: 'group', item }, item.category)">向学员解答</button>
             </td>
         </tr>
         <!-- 递归渲染子项 -->
         <EvaluationItem v-for="child in item.childList" :key="child.evaluationItemId" :item="child" :scores="scores"
             :evaluationItemId="evaluationItemId" :diseaseId="diseaseId" :depth="depth + 1" is="tr"
-            :evaluationId="evaluationId" :personId="personId" @hint="$emit('hint', $event)" />
+            :evaluationId="evaluationId" :personId="personId" @hint="$emit('hint', $event, item.category)" />
     </template>
     <tr v-else class="row-leaf">
         <td class="cell-title">
@@ -41,13 +41,9 @@
         </td>
         <td class="cell-score">
             <div class="x-c" style="gap: 20px;min-height: 100px;padding: 0 8px;box-sizing: border-box;">
-                <button type="button"
-                    class="score-btn ok"
-                    :class="{ active: scores[item.evaluationItemId] === 1 }"
+                <button type="button" class="score-btn ok" :class="{ active: scores[item.evaluationItemId] === 1 }"
                     @click="setScore(1, item.evaluationItemId)">✔</button>
-                <button type="button"
-                    class="score-btn err"
-                    :class="{ active: scores[item.evaluationItemId] === 0 }"
+                <button type="button" class="score-btn err" :class="{ active: scores[item.evaluationItemId] === 0 }"
                     @click="setScore(0, item.evaluationItemId)">✘</button>
             </div>
         </td>
@@ -216,16 +212,21 @@ async function setScore(val, son_evaluationItemId) {
     color: #fff;
     background: #d9d9d9;
     transition: all 0.15s ease;
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     filter: grayscale(1);
     opacity: 0.2;
 }
 
-.score-btn.ok { background: #5bbb6a; }
-.score-btn.err { background: #ff6b6f; }
+.score-btn.ok {
+    background: #5bbb6a;
+}
+
+.score-btn.err {
+    background: #ff6b6f;
+}
 
 .score-btn.active {
-    box-shadow: 0 0 0 2px rgba(0,0,0,0.06) inset;
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06) inset;
     filter: grayscale(0);
     opacity: 1;
 

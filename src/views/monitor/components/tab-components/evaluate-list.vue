@@ -14,14 +14,12 @@
           <template v-for="item in evaluationItem" :key="item.evaluationItemId">
             <EvaluationItem :item="item" :scores="scores" :evaluationItemId="item.evaluationItemId"
               :diseaseId="currentDiseaseId" :personId="currentPersonId" :evaluationId="evaluation.evaluationId"
-              @hint="onHint" />  
+              @hint="onHint" />
           </template>
         </tbody>
       </table>
     </div>
-    <div class="submit-bar" style="display: none;">
-      <button class="submit-btn" @click="onSubmit">提交评分</button>
-    </div>
+   
   </div>
 </template>
 
@@ -156,9 +154,9 @@ const handleEvaluationTip = async () => {
 };
 
 // 构建并发送喇叭提示
-const onHint = async ({ secret, scope, item }) => {
-  console.log('开始构建并发送喇叭提示',secret);
-  
+const onHint = async ({ secret, scope, item }, sence_Name) => {
+  console.log('开始构建并发送喇叭提示', secret, scope, item, sence_Name);
+
   try {
     // 根据暗号与点击范围选择目标集合：F/A -> 当前分组 childList；S -> 当前单项
     const upperSecret = (secret || '').toUpperCase();
@@ -170,7 +168,7 @@ const onHint = async ({ secret, scope, item }) => {
     }
 
     const tasks = targetLeafItems.map(task => {
-      const name = task.description || '';
+      const name = task.category || '';
       if (upperSecret === 'S') {
         return { task_name: name };
       }
@@ -200,7 +198,8 @@ const onHint = async ({ secret, scope, item }) => {
       deviceId: currentPersonId.value || props.personId || '',
       tasks,
       doctor_action: doctorAction,
-      secret: upperSecret || 'S'
+      secret: upperSecret || 'S',
+      sence_Name
     };
 
     const resp = await aiGlassesHint(payload);
