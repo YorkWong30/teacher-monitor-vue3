@@ -105,7 +105,7 @@
               </div>
               <div class="task-actions x-f">
                 <van-button size="mini" class="btn-cancel" @click="removeTask(index)">删除</van-button>
-                <van-button size="mini" type="primary" class="btn-ok" @click="confirmTask(index)">保存</van-button>
+                <!-- <van-button size="mini" type="primary" class="btn-ok" @click="confirmTask(index)">保存</van-button> -->
               </div>
             </div>
           </template>
