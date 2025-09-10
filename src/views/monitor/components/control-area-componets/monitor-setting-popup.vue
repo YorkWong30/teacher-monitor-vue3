@@ -85,7 +85,7 @@ const sliderObj = ref({
   },
   BP: {
     type: "BP",
-    typeTitle: "收缩压,舒张压",
+    typeTitle: "舒张压，收缩压",
     color: "#FF0A08",
     value: [20, 80],
     min: 40,

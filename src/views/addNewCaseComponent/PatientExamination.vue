@@ -53,10 +53,10 @@
         <van-slider v-model="formData.vitals.bp" range :min="50" :max="200" :step="1" :bar-height="10"
           active-color="#1a89fa">
           <template #left-button="{ value }">
-            <div class="custom-button">收缩压{{ value }}</div>
+            <div class="custom-button">舒张压{{ value }}</div>
           </template>
           <template #right-button="{ value }">
-            <div class="custom-button">舒张压{{ value }}</div>
+            <div class="custom-button">收缩压{{ value }}</div>
           </template>
         </van-slider>
 
